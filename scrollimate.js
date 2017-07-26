@@ -86,7 +86,7 @@ var scrollimate = (function( window, $ ){
     }
   };
 
-  var parallax = function () {     
+  var saParallax = function () {     
     // gets all elelemts with the data-sabglayer attribute
     _global.saBgLay = $("[data-sabglayer]");  
 
@@ -250,7 +250,7 @@ var scrollimate = (function( window, $ ){
 
 
   /* * function adds class class to target element while and ONLY WHILE scrollingElement is scrolled * */ 
-  var scrollClass = function ( $scrollingElement, $target, classname ){
+  var saScrollClass = function ( $scrollingElement, $target, classname ){
     $target.addClass('scrollprep');
     var timer,
         flag = false;
@@ -310,11 +310,10 @@ var scrollimate = (function( window, $ ){
    * Public Methods
    */
   return{
-    parallax: parallax,
+    saParallax: saParallax,
     saScroll: saScroll,
-    loggi: loggi,
     saTabs: saTabs,
-    scrollClass: scrollClass,
+    saScrollClass: saScrollClass,
     init: init,
   };
 })(window, jQuery);

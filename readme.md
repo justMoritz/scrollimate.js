@@ -55,13 +55,13 @@ The original scrollimate function. You _have to_ call sa Parallax with the init 
 
 #### Advanced Setup:
 
-You can tell the `data-sabglayer` attribute how your parallax animation should behave.
+*You can tell the `data-sabglayer` attribute how your parallax animation should behave.
 By Default, it will simply start at the top and will scroll at half the speed that the page once you start scrolling.
-The `data-sabglayer` will take two arguments. 
+The `data-sabglayer` will take two arguments:*
 
-If you supply it only one number, this is the speed at which you want the element to scroll relative to the page speed. 
-  data-sabglayer="-0.5, 0.36"
-To create several layers of parallax, or simply to more fine-tune the effect, you can se the `data-sabglayer` attribute to any floating point value between 0 (which will cause the element to scroll normally) and 2 (which will cause the element to appear static on the page). You can also use any number larger than 2, which will cause the element to scroll in the opposite direction of the scroll! And yes, you can also use negative numbers and make the element scroll faster than the page!
+- Supply a single number like so `data-sabglayer="-0.5, 0.36"`:
+
+If you supply it a single number, this is the speed at which you want the element to scroll relative to the page speed. To create several layers of parallax, or simply to more fine-tune the effect, you can se the `data-sabglayer` attribute to any floating point value between 0 (which will cause the element to scroll normally) and 2 (which will cause the element to appear static on the page). You can also use any number larger than 2, which will cause the element to scroll in the opposite direction of the scroll! And yes, you can also use negative numbers and make the element scroll faster than the page!
   
 If you supply two argments seperated by comma like so:
   data-sabglayer="-0.5, 0.36"

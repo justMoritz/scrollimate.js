@@ -56,6 +56,8 @@ The original scrollimate function. You **_have to_** call SA Parallax with the *
   `<script> scrollimate.init(['saParallax']); </script>`
 
 #### ADVANCED SETUP:
+![SA PARALLAX SAMPLE](http://files.moritzzimmer.com/saparallax2.gif)
+See how in this example, the top hero-image parallaxes right away, but each following elements (images) only when it comes into view? SA Parallax can do that!
 
 *You can tell the `data-sabglayer` attribute how your parallax animation should behave.
 By Default, it will simply start at the top and will scroll at half the speed that the page once you start scrolling.

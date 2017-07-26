@@ -8,15 +8,15 @@ Scrollimate focuses on features and functions related to scrolling, animations (
 ## Usage & Setup: 
 
 This is a *jQuery Plugin*, so you'll need jQuery. 
-In the body, right before the footer: Include jQuery. Include saparallax.js.
+In the body, right before the footer: Include jQuery. Include scrollimate.js.
 
     <script src="path/to/your/scripts/jquery-2.1.4.min.js"></script>
-    <script src="path/to/your/scripts/saparallax.js"></script>
+    <script src="path/to/your/scripts/scrollimate.js"></script>
 
 Each of the functionalities are implemented as methods of the scrollimate object. That means you just need to call the method you want, or you can use the handy init function and just need one call for them all!
 
 
-#### Init Function
+### Init Function
 
 (Parallax is called via the init method)
 
@@ -27,7 +27,7 @@ The init function takes a single argument, an array of the methods you want to u
 will initiate the Smooth Anchor Sroll and Parallax functions
 
 
-#### Calling Methods manually
+### Calling Methods manually
 
 While you can call (almost) every method via *init*, you can also call the methods each manually, such as:
 
@@ -36,7 +36,7 @@ While you can call (almost) every method via *init*, you can also call the metho
 which will initiate the saTabs Function
 
 
-### The Methods
+## The Methods
 
 What does Scrollimate Entail? Let's take a look:
 

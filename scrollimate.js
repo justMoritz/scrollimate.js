@@ -1,12 +1,15 @@
-/*
- * adapted from github.com/justMoritz
+/* moritzzimmer.com
+ *
+ * written by Moritz Zimmer, 2016 – 2017
+ * http://www.moritzzimmer.com
+ *
+ * (c) 2017 CC Attribution 4.0
+ * https://creativecommons.org/licenses/by/4.0/legalcode
+ *
  */
 var scrollimate = (function( window, $ ){
 
-  var _domEl = {
-
-  },
-  _global = {
+  var _global = {
     wp:   0,
     prlx: 0,
     speed: 1,
@@ -14,7 +17,6 @@ var scrollimate = (function( window, $ ){
     saItHgt: [],
     saWinHi: '',
   };
-
 
 
   /* * General Functionality * */
@@ -27,7 +29,6 @@ var scrollimate = (function( window, $ ){
     }
     return context[func].apply(context);
   };
-
 
 
   /* * Parallax Functionality * */
@@ -114,7 +115,6 @@ var scrollimate = (function( window, $ ){
       _global.prlx = 1;
     }
   };
-
 
 
   /* * Smooth Anchor Scroll Functionality * */
@@ -248,7 +248,6 @@ var scrollimate = (function( window, $ ){
   }; // End saTabs
  
 
-
   /* * function adds class class to target element while and ONLY WHILE scrollingElement is scrolled * */ 
   var saScrollClass = function ( $scrollingElement, $target, classname ){
     $target.addClass('scrollprep');
@@ -321,7 +320,6 @@ var scrollimate = (function( window, $ ){
       });
     });
   };
-
 
 
   /* 

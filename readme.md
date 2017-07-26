@@ -48,9 +48,9 @@ The original scrollimate function. You _have to_ call sa Parallax with the init 
 
 #### Basic Setup:
 
- 1.) Follow the Instructions for installation
- 2.) add the following data-attribute to the element you wish to parallax scroll: `data-sabglayer`
- 3.) Call the init Function with 
+- Follow the Instructions for installation
+- add the following data-attribute to the element you wish to parallax scroll: `data-sabglayer`
+- Call the init Function with:
   `<script> scrollimate.init(['saParallax']); </script>`
 
 #### Advanced Setup:

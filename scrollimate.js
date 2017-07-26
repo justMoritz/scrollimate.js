@@ -269,6 +269,24 @@ var scrollimate = (function( window, $ ){
   };
 
 
+  /* * Accordion Functionaliy * */
+  var saAccordion = function(element, mainwidthinpercent){
+    console.log(mainwidthinpercent);
+    if (mainwidthinpercent === undefined){
+      mainwidthinpercent = '50';
+    }
+    // number of elements
+    var numEl = $(element).length;
+    var restwidth = (100-mainwidthinpercent)/(numEl-1);
+
+    $(element).css('width', restwidth+'%').removeClass('active');
+    $(element+':first-of-type').css('width', mainwidthinpercent+'%').addClass('active');     
+    $(element).click(function(){
+      $(element).css('width', restwidth+'%').removeClass('active');
+      $(this).css('width', mainwidthinpercent+'%').addClass('active');                   
+    });
+  };
+
 
   /* * Init Function * */
   var init = function(input){

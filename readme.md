@@ -56,7 +56,7 @@ The original scrollimate function. You **_have to_** call SA Parallax with the *
   `<script> scrollimate.init(['saParallax']); </script>`
 
 #### ADVANCED SETUP:
-![SA PARALLAX SAMPLE](http://files.moritzzimmer.com/saparallax2.gif)
+![SA PARALLAX SAMPLE](http://files.moritzzimmer.com/saparallax3.gif)
 
 See how in this example, the top hero-image parallaxes right away, but each following elements (images) only when it comes into view, and consistently for each element? SA Parallax can do that!
 

@@ -208,7 +208,7 @@ var scrollimate = (function( window, $ ){
 
     function setUpPage() {
       // finds all anchor tabs within the data-tabscrollnavcontainer
-      $tabscroll_anchors = $("[data-tabscrollnavcontainer]").find("a");
+      $tabscroll_anchors = $("[data-tabscrollnavcontainer]").find("a").not("[data-saexclude]");
 
       // if we pass a type in here, we can control the method of change. Right now we can do fade, slide and none.
       $transition_type = $("[data-tabscrollnavcontainer]").attr("data-tabscrollnavcontainer");
@@ -362,12 +362,14 @@ var scrollimate = (function( window, $ ){
         _executeFunctionByName("scrollimate."+input[i]+"");
       }
 
+
       /* Theoretical Example of debouncing, does not work that well */
       // $('[data-sabglayer]').css('transition', 'all 0.075s');
       var __debouncedParallax = _debounce(function() {
         __windowScrollHelper();
       }, 5);
       /* End Debounce */
+
 
       // Code that initiates the window scroll listener, and all code (parallax or otherwise) that goes with it.
       // when the window is scrolled
@@ -396,6 +398,8 @@ var scrollimate = (function( window, $ ){
 
     });
   };
+
+
 
 
   /* 

@@ -174,6 +174,10 @@ Note: (The class for the active tab on the navigation is `.tabscroll_activeNavi`
 2. Call the Method once on the page:
   `<script> scrollimate.saTabs; </script>` (You may also use the init function by supplying 'saScroll' as an additional argument)
 
+#### EXCLUSION
+
+You want to have a link within your navigation that does something else. An external link, a popup link, etc. This is possible by simply adding the `data-saexclude` attribute to the anchor element.
+
 ---
 ---
 

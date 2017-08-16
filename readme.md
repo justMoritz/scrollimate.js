@@ -8,7 +8,7 @@ Scrollimate focuses on features and functions related to scrolling, animations (
 ## Usage & Setup: 
 
 This is a *jQuery Plugin*, so you'll need jQuery. 
-In the body, right before the footer: Include jQuery. Include scrollimate.js.
+Include jQuery. Include scrollimate.js.
 
     <script src="path/to/your/scripts/jquery-2.1.4.min.js"></script>
     <script src="path/to/your/scripts/scrollimate.js"></script>

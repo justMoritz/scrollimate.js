@@ -74,6 +74,15 @@ With this, you can define the position of parallaxing element. This is useful if
 
 *More importantly*, giving this attribute is useful if the element you wish to parallax is not at the top. The element will only _start_ parallaxing _once in view_, and will be offset by the number specified. (If the second argument is not given, the element will start parallaxing from the very moment the page scrolls).
 
+
+#### Mobile Control ####
+
+By default, parallax will not be enabled on screen sizes smaller than 768px. (Sidenote: This applies to initial screen-size: Whatever your page loaded with, determined whether or not parallax is enabled. This is by design so that check is not performed over and over).
+
+*You can re-enable* mobile parallax by calling the `enableMobile` before the saParallax method like so: 
+    `<script> scrollimate.init(['enableMobile', 'saParallax']); </script>`
+(If you are running the init function with other methods the order doens't matter, as long as saParallax gets called last).
+
 ---
 
 # SA (Smooth Anchor) Scroll

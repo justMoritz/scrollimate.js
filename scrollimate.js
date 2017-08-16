@@ -1,6 +1,6 @@
 /* moritzzimmer.com
  *
- * written by Moritz Zimmer, 2016 – 2017
+ * written by Moritz Zimmer, 2016 – 2017
  * http://www.moritzzimmer.com
  *
  * (c) 2017 CC Attribution 4.0
@@ -18,6 +18,23 @@ var scrollimate = (function( window, $ ){
     saWinHi: '',
   };
 
+
+  /* * Debounce Creator * */
+  _debounce = function(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate){ func.apply(context, args);}
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow){ func.apply(context, args);}
+    };
+  };
+  
 
   /* * General Functionality * */
   var _executeFunctionByName = function (functionName) {
@@ -161,25 +178,27 @@ var scrollimate = (function( window, $ ){
       if ($location === undefined || $location === 'all' ){
           // show only the first section
           $("[data-tabscroll]:first-of-type").show();   
+          $("[data-tabscroll]:first-of-type").addClass('activeTab');   
       }
       // if there is a hash-link active
       else{
         //hide all tabs
-        $("[data-tabscroll]").hide();
+        $("[data-tabscroll]").hide().removeClass('activeTab');   
+
 
         // fade in only the tab with the data-tabscroll attribute corresponding
         // to the link that was clicked.
         if ( $transition_type === 'fade') {
-          $("[data-tabscroll='"+$location+"']").fadeIn();
+          $("[data-tabscroll='"+$location+"']").fadeIn().addClass('activeTab');   
           __activeClassHelperFunction($location);
 
         } 
         else if ( $transition_type === 'slide') {
-          $("[data-tabscroll='"+$location+"']").slideDown();
+          $("[data-tabscroll='"+$location+"']").slideDown().addClass('activeTab');   
           __activeClassHelperFunction($location);
         }
         else{
-          $("[data-tabscroll='"+$location+"']").show();
+          $("[data-tabscroll='"+$location+"']").show().addClass('activeTab');   
           __activeClassHelperFunction($location);
         }
       }             
@@ -269,21 +288,56 @@ var scrollimate = (function( window, $ ){
 
 
   /* * Accordion Functionaliy * */
-  var saAccordion = function(element, mainwidthinpercent){
-    console.log(mainwidthinpercent);
-    if (mainwidthinpercent === undefined){
-      mainwidthinpercent = '50';
-    }
-    // number of elements
-    var numEl = $(element).length;
-    var restwidth = (100-mainwidthinpercent)/(numEl-1);
+  var saAccordion = function(element, mainwidthinpercent, type){
+    var __accordionHelper = function(){
+      if (mainwidthinpercent === undefined){
+        mainwidthinpercent = '50';
+      }
+      // number of elements
+      var numEl = $(element).length;
+      var restwidth = (100-mainwidthinpercent)/(numEl-1);
 
-    $(element).css('width', restwidth+'%').removeClass('active');
-    $(element+':first-of-type').css('width', mainwidthinpercent+'%').addClass('active');     
-    $(element).click(function(){
-      $(element).css('width', restwidth+'%').removeClass('active');
-      $(this).css('width', mainwidthinpercent+'%').addClass('active');                   
+      // desktop functionality
+      if ( $(window).width() > 767) {      
+        $(element).css('padding-bottom', '33%'); // we may want to get this number from the user via an argument
+        $(element).css('width', restwidth+'%').removeClass('active');
+        $(element+':first-of-type').css('width', mainwidthinpercent+'%').addClass('active');   
+      } 
+      // mobile functionality
+      else{
+        $(element).css('width', '100%');
+        $(element).css('height', 0).css('padding-bottom', restwidth+'%').removeClass('active');
+        $(element+':first-of-type').css('height', 0).css('padding-bottom', mainwidthinpercent+'%').addClass('active');   
+      }
+
+      $(element).on(type, function(){
+        // desktop functionality
+        if ( $(window).width() > 767) {      
+          ////// console.log('desktop!');
+          $(this).css('width', mainwidthinpercent+'%').addClass('active');    
+          $(element).css('width', restwidth+'%').removeClass('active');
+          $(this).css('width', mainwidthinpercent+'%').addClass('active'); 
+        } 
+        // mobile functionality
+        else{
+          ////// console.log('mobile');
+          $(element).css('width', '100%');
+          $(this).css('height', 0).css('padding-bottom', mainwidthinpercent+'%').addClass('active');    
+          $(element).css('height', 0).css('padding-bottom', restwidth+'%').removeClass('active');
+          $(this).css('height', 0).css('padding-bottom', mainwidthinpercent+'%').addClass('active'); 
+        } 
+      });
+
+      setTimeout(function(){
+        $(element).css('transition', 'all 0.6s');
+      }, 1000);
+    };
+    __accordionHelper();
+
+    window.addEventListener('resize', function () {
+      __accordionHelper();
     });
+    
   };
 
 
@@ -306,20 +360,55 @@ var scrollimate = (function( window, $ ){
         _executeFunctionByName("scrollimate."+input[i]+"");
       }
 
-      
-      // when the window is scrolled
-      $(window).scroll( function(){
-        // updates the window position variable
-        _global.wp = $(window).scrollTop();
 
-        // runs the parallax animation function, 
-        // ONLY if the global prlx indicates the parallax function has been initiated
-        if(_global.prlx === 1){
-          _parallaxAnimation(_global.saBgLay);
-        }      
-      });
+      /* Theoretical Example of debouncing, does not work that well */
+      // $('[data-sabglayer]').css('transition', 'all 0.075s');
+      var __debouncedParallax = _debounce(function() {
+
+        $(window).scroll( function(){
+        // updates the window position variable
+          _global.wp = $(window).scrollTop();
+
+          // console.log( _global.wp );
+
+          // runs the parallax animation function, 
+          // ONLY if the global prlx indicates the parallax function has been initiated
+          if(_global.prlx === 1){
+            _parallaxAnimation(_global.saBgLay);
+          }   
+        });
+      }, 5);
+      /* End Debounce */
+
+
+      // only execute the when we are on a mobile screen
+      if ( $(window).width() > 767) {      
+        // when the window is scrolled
+      
+        // __debouncedParallax();
+        $(window).scroll( function(){
+          // updates the window position variable
+          _global.wp = $(window).scrollTop();
+
+          // console.log( _global.wp );
+
+          // runs the parallax animation function, 
+          // ONLY if the global prlx indicates the parallax function has been initiated
+          if(_global.prlx === 1){
+            _parallaxAnimation(_global.saBgLay);
+          }   
+        });
+
+      } 
+      else {
+        //Add your javascript for small screens here 
+      }
+
+      
     });
   };
+
+
 
 
   /* 
@@ -330,9 +419,9 @@ var scrollimate = (function( window, $ ){
     saScroll: saScroll,
     saTabs: saTabs,
     saScrollClass: saScrollClass,
+    saAccordion: saAccordion,
     init: init,
   };
 })(window, jQuery);
-
 
 

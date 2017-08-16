@@ -16,10 +16,13 @@ var scrollimate = (function( window, $ ){
     saBgLay: [],
     saItHgt: [],
     saWinHi: '',
+    mobileEnabled: false,
   };
 
+  var enableMobile = function(){
+    _global.mobileEnabled = true;
+  };
 
-  /* * Debounce Creator * */
   _debounce = function(func, wait, immediate) {
     var timeout;
     return function() {
@@ -34,7 +37,6 @@ var scrollimate = (function( window, $ ){
       if (callNow){ func.apply(context, args);}
     };
   };
-  
 
   /* * General Functionality * */
   var _executeFunctionByName = function (functionName) {
@@ -364,47 +366,37 @@ var scrollimate = (function( window, $ ){
       /* Theoretical Example of debouncing, does not work that well */
       // $('[data-sabglayer]').css('transition', 'all 0.075s');
       var __debouncedParallax = _debounce(function() {
-
-        $(window).scroll( function(){
-        // updates the window position variable
-          _global.wp = $(window).scrollTop();
-
-          // console.log( _global.wp );
-
-          // runs the parallax animation function, 
-          // ONLY if the global prlx indicates the parallax function has been initiated
-          if(_global.prlx === 1){
-            _parallaxAnimation(_global.saBgLay);
-          }   
-        });
+        __windowScrollHelper();
       }, 5);
       /* End Debounce */
 
 
-      // only execute the when we are on a mobile screen
-      if ( $(window).width() > 767) {      
-        // when the window is scrolled
-      
-        // __debouncedParallax();
-        $(window).scroll( function(){
-          // updates the window position variable
-          _global.wp = $(window).scrollTop();
+      // Code that initiates the window scroll listener, and all code (parallax or otherwise) that goes with it.
+      // when the window is scrolled
+      $(window).scroll( function(){
+        // updates the window position variable
+        _global.wp = $(window).scrollTop();
 
-          // console.log( _global.wp );
+        // console.log( _global.wp );
 
-          // runs the parallax animation function, 
-          // ONLY if the global prlx indicates the parallax function has been initiated
-          if(_global.prlx === 1){
-            _parallaxAnimation(_global.saBgLay);
-          }   
-        });
 
-      } 
-      else {
-        //Add your javascript for small screens here 
-      }
+        /// parallax functionality ///
+        if(_global.mobileEnabled === true){
+                    // __debouncedParallax();
+          // runs the parallax animation function, ONLY if the global prlx indicates the parallax function has been initiated
+          if(_global.prlx === 1){ _parallaxAnimation(_global.saBgLay); }   
+        }
+        else{
+          // only execute the when we are on a mobile screen
+          if ( $(window).width() > 767) {      
+                      // __debouncedParallax();
+            // runs the parallax animation function, ONLY if the global prlx indicates the parallax function has been initiated
+            if(_global.prlx === 1){ _parallaxAnimation(_global.saBgLay); }   
+          } 
+        } 
+        
+      });
 
-      
     });
   };
 
@@ -421,6 +413,7 @@ var scrollimate = (function( window, $ ){
     saScrollClass: saScrollClass,
     saAccordion: saAccordion,
     init: init,
+    enableMobile: enableMobile,
   };
 })(window, jQuery);
 

@@ -11,7 +11,7 @@ var scrollimate = (function( window, $ ){
 
   var _global = {
     wp:   0,
-    prlx: 0,
+    prlx: false,
     speed: 1,
     saBgLay: [],
     saItHgt: [],
@@ -131,7 +131,7 @@ var scrollimate = (function( window, $ ){
       });
       
       console.log('parallax initiated');
-      _global.prlx = 1;
+      _global.prlx = true;
     }
   };
 
@@ -350,12 +350,12 @@ var scrollimate = (function( window, $ ){
     // Document Ready 
     $(function(){
 
-        // height of viewport (window Height)
+      // height of viewport (window Height)
+      _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
+      // updates in case of window resize
+      $(window).resize(function(){
         _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
-        // updates in case of window resize
-        $(window).resize(function(){
-          _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
-        });
+      });
 
       for(i=0; i < input.length; i++){
         console.log( input[i] );
@@ -377,21 +377,20 @@ var scrollimate = (function( window, $ ){
         // updates the window position variable
         _global.wp = $(window).scrollTop();
 
-        // console.log( _global.wp );
-
+        // console.log( _global.screenSizeMobile );
 
         /// parallax functionality ///
         if(_global.mobileEnabled === true){
                     // __debouncedParallax();
           // runs the parallax animation function, ONLY if the global prlx indicates the parallax function has been initiated
-          if(_global.prlx === 1){ _parallaxAnimation(_global.saBgLay); }   
+          if(_global.prlx === true){ _parallaxAnimation(_global.saBgLay); }   
         }
         else{
           // only execute the when we are on a mobile screen
           if ( $(window).width() > 767) {      
-                      // __debouncedParallax();
+                    // __debouncedParallax();
             // runs the parallax animation function, ONLY if the global prlx indicates the parallax function has been initiated
-            if(_global.prlx === 1){ _parallaxAnimation(_global.saBgLay); }   
+            if(_global.prlx === true){ _parallaxAnimation(_global.saBgLay); }   
           } 
         } 
         

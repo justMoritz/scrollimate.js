@@ -217,10 +217,12 @@ _as of right now, this method_  **_cannot_** **_be_** **_called_** **_with_** **
 2. Follow the Instructions for Scrollimate Installation
 3. Call the Method once on the page with _two arguments_ like so: `<script> saAccordion('.element', '66.66'); </script>` 
 
-SA Accordion takes **at** **least** **one**, but can take two arguments:
+SA Accordion takes **at** **least** **one**, but can take four arguments:
 
 1. The target elements selector (in the above example every element with the `.element` class)
 2. (optional) The width (in percent) of the exanded element. If none is provided, the default width is 50%.
+3. (optional) The type of event that raises the change over the element selected in argument 1. Can be click, mouseover, mouseout, etc. If left blank, defaults to CLICK
+4. (optional) You can determin the height of the element, in pixels, or in percent of the width of the individual element. (This is done via padding-bottom)
 
 
 

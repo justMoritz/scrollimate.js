@@ -290,7 +290,7 @@ var scrollimate = (function( window, $ ){
 
 
   /* * Accordion Functionaliy * */
-  var saAccordion = function(element, mainwidthinpercent, type){
+  var saAccordion = function(element, mainwidthinpercent, type, imageaspectratio){
     var __accordionHelper = function(){
       if (mainwidthinpercent === undefined){
         mainwidthinpercent = '50';
@@ -300,8 +300,11 @@ var scrollimate = (function( window, $ ){
       var restwidth = (100-mainwidthinpercent)/(numEl-1);
 
       // desktop functionality
-      if ( $(window).width() > 767) {      
-        $(element).css('padding-bottom', '33%'); // we may want to get this number from the user via an argument
+      if ( $(window).width() > 767) {    
+        // if no imageaspectratio is given, default to 33%  
+        if(imageaspectratio === undefined){ imageaspectratio = "33%" ;}
+        console.log(imageaspectratio);
+        $(element).css('padding-bottom', imageaspectratio); // we may want to get this number from the user via an argument
         $(element).css('width', restwidth+'%').removeClass('active');
         $(element+':first-of-type').css('width', mainwidthinpercent+'%').addClass('active');   
       } 
@@ -312,6 +315,8 @@ var scrollimate = (function( window, $ ){
         $(element+':first-of-type').css('height', 0).css('padding-bottom', mainwidthinpercent+'%').addClass('active');   
       }
 
+      // if no type is given, default to click
+      if (type === undefined){ type = 'click'; }
       $(element).on(type, function(){
         // desktop functionality
         if ( $(window).width() > 767) {      
@@ -415,5 +420,3 @@ var scrollimate = (function( window, $ ){
     enableMobile: enableMobile,
   };
 })(window, jQuery);
-
-

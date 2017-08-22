@@ -17,12 +17,23 @@ var scrollimate = (function( window, $ ){
     saItHgt: [],
     saWinHi: '',
     mobileEnabled: false,
+    isMObile: false,
   };
 
+
+  /* * Function that checks whether or not we are on a mobile device by userAgent string. * */
+  var _mobileCheck = function(){
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+      _global.$isMObile = true;
+    }
+  };
+
+  /* * checks and sets variable that enables parallax even on mobile in init function * */
   var enableMobile = function(){
     _global.mobileEnabled = true;
   };
 
+  /* * Debounce Function, not currently used * */
   _debounce = function(func, wait, immediate) {
     var timeout;
     return function() {
@@ -52,13 +63,28 @@ var scrollimate = (function( window, $ ){
 
   /* * Parallax Functionality * */
   var __parallaxHelperFunction = function( saBg, tOfSet, winHi, spd, elHeight, left, flag ){
-    if(flag === 0){
-      tOfSet = 0;
-      winHi = 0;
-      elHeight = 0;
+
+    // Helper Function
+    var ___execute = function(){
+      if(flag === 0){
+        tOfSet = 0;
+        winHi = 0;
+        elHeight = 0;
+      }
+      $(saBg).css("transform", "translate3d("+left+", "+Math.floor((((_global.wp-tOfSet+winHi)/2)*spd)+elHeight)+"px, 0px)");       
+      $(saBg).css("-ms-transform", "translate("+left+", "+Math.floor((((_global.wp-tOfSet+winHi)/2)*spd)+elHeight)+"px)"); 
+    };
+     
+    // Not sure why the check in the init function does not always work 100%, so this is a workaround for now :/
+    if(_global.mobileEnabled === true){
+      ___execute();
     }
-    $(saBg).css("transform", "translate3d("+left+", "+Math.floor((((_global.wp-tOfSet+winHi)/2)*spd)+elHeight)+"px, 0px)");       
-    $(saBg).css("-ms-transform", "translate("+left+", "+Math.floor((((_global.wp-tOfSet+winHi)/2)*spd)+elHeight)+"px)"); 
+    else{
+      // if ( !_global.$isMObile ) {      
+      if ( $(window).width() > 767) {
+        ___execute();
+      } 
+    }      
   };
 
   var _parallaxAnimation = function($saBgLayers){
@@ -106,11 +132,22 @@ var scrollimate = (function( window, $ ){
     }
   };
 
+  /* 
+   *
+   * Parallax Animation Chain works as follows: 
+   * 1.) Init -> 
+   * 2.) -> saParallax (setup); 
+   *
+   * 3.) Scroll Listener (inside Init) -> 
+   * 4.) -> _parallaxAnimation ->
+   * 5.) -> __parallaxHelperFunction
+   *
+   */
   var saParallax = function () {     
     // gets all elelemts with the data-sabglayer attribute
     _global.saBgLay = $("[data-sabglayer]");  
 
-    // Only run functionality if there are no elements
+    // Only run functionality if there are not no elements
     if( _global.saBgLay.length !== 0 ){
 
       // variable to hold the initial position from the top of each element.
@@ -351,6 +388,8 @@ var scrollimate = (function( window, $ ){
   /* * Init Function * */
   var init = function(input){
     console.log('Running Scrollimate with the following input: ' + input );
+
+    _mobileCheck();
     
     // Document Ready 
     $(function(){
@@ -360,6 +399,10 @@ var scrollimate = (function( window, $ ){
       // updates in case of window resize
       $(window).resize(function(){
         _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
+
+        // checks to see if user agent has changed on screen re-size. Seems pointless, but helps with chrome dev tools
+        _mobileCheck();
+
       });
 
       for(i=0; i < input.length; i++){
@@ -367,43 +410,20 @@ var scrollimate = (function( window, $ ){
         _executeFunctionByName("scrollimate."+input[i]+"");
       }
 
-
-      /* Theoretical Example of debouncing, does not work that well */
-      // $('[data-sabglayer]').css('transition', 'all 0.075s');
-      var __debouncedParallax = _debounce(function() {
-        __windowScrollHelper();
-      }, 5);
-      /* End Debounce */
-
-
       // Code that initiates the window scroll listener, and all code (parallax or otherwise) that goes with it.
       // when the window is scrolled
       $(window).scroll( function(){
         // updates the window position variable
         _global.wp = $(window).scrollTop();
 
-        // console.log( _global.screenSizeMobile );
-
-        /// parallax functionality ///
-        if(_global.mobileEnabled === true){
-                    // __debouncedParallax();
-          // runs the parallax animation function, ONLY if the global prlx indicates the parallax function has been initiated
-          if(_global.prlx === true){ _parallaxAnimation(_global.saBgLay); }   
+        /* * Mobile checking moved inside the __parallaxHelperFunction function (the final stage of the parallax animatino chain)* */
+        if( _global.prlx ){
+          _parallaxAnimation(_global.saBgLay); 
         }
-        else{
-          // only execute the when we are on a mobile screen
-          if ( $(window).width() > 767) {      
-                    // __debouncedParallax();
-            // runs the parallax animation function, ONLY if the global prlx indicates the parallax function has been initiated
-            if(_global.prlx === true){ _parallaxAnimation(_global.saBgLay); }   
-          } 
-        } 
-        
       });
 
     });
   };
-
 
 
 

@@ -86,7 +86,7 @@ var scrollimate = (function( window, $ ){
       }
       /* Resets all transformations that may have already happened before the window was resized below 768px */
       else{
-        _global.saBgLay.css('transform', 'translate3d(0, 0, 0)')
+        _global.saBgLay.css('transform', 'translate3d(0, 0, 0)');
       }
     }      
   };

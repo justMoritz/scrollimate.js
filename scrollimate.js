@@ -83,7 +83,11 @@ var scrollimate = (function( window, $ ){
       // if ( !_global.$isMObile ) {      
       if ( $(window).width() > 767) {
         ___execute();
-      } 
+      }
+      /* Resets all transformations that may have already happened before the window was resized below 768px */
+      else{
+        _global.saBgLay.css('transform', 'translate3d(0, 0, 0)')
+      }
     }      
   };
 
@@ -400,7 +404,7 @@ var scrollimate = (function( window, $ ){
       $(window).resize(function(){
         _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
 
-        // checks to see if user agent has changed on screen re-size. Seems pointless, but helps with chrome dev tools
+        // checks to see if user agent has changed. Seems pointless, but helps with chrome dev tools
         _mobileCheck();
 
       });
@@ -410,20 +414,33 @@ var scrollimate = (function( window, $ ){
         _executeFunctionByName("scrollimate."+input[i]+"");
       }
 
+
+      /* Theoretical Example of debouncing, does not work that well */
+      // $('[data-sabglayer]').css('transition', 'all 0.075s');
+      var __debouncedParallax = _debounce(function() {
+        __windowScrollHelper();
+      }, 5);
+      /* End Debounce */
+
+
       // Code that initiates the window scroll listener, and all code (parallax or otherwise) that goes with it.
       // when the window is scrolled
       $(window).scroll( function(){
         // updates the window position variable
         _global.wp = $(window).scrollTop();
 
+        // console.log( _global.screenSizeMobile );
+
         /* * Mobile checking moved inside the __parallaxHelperFunction function (the final stage of the parallax animatino chain)* */
         if( _global.prlx ){
           _parallaxAnimation(_global.saBgLay); 
         }
+
       });
 
     });
   };
+
 
 
 

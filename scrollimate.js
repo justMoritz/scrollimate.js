@@ -150,6 +150,8 @@ var scrollimate = (function( window, $ ){
   var saParallax = function () {     
     // gets all elelemts with the data-sabglayer attribute
     _global.saBgLay = $("[data-sabglayer]");  
+    _global.saBgLay.css('will-change', 'transform');
+
 
     // Only run functionality if there are not no elements
     if( _global.saBgLay.length !== 0 ){
@@ -301,7 +303,6 @@ var scrollimate = (function( window, $ ){
 
     /* // not currently used, left for reference
     $(window).on('hashchange', function (event) {  
-
       // triggers the hashchange manually on pageload. 
       // Adapted from http://stackoverflow.com/questions/20652020/the-hashchange-event-of-jquery-doesnt-work-if-i-open-a-page-with-hash-directly
     }).trigger('hashchange'); */
@@ -344,7 +345,7 @@ var scrollimate = (function( window, $ ){
       if ( $(window).width() > 767) {    
         // if no imageaspectratio is given, default to 33%  
         if(imageaspectratio === undefined){ imageaspectratio = "33%" ;}
-        console.log(imageaspectratio);
+        // console.log(imageaspectratio);
         $(element).css('padding-bottom', imageaspectratio); // we may want to get this number from the user via an argument
         $(element).css('width', restwidth+'%').removeClass('active');
         $(element+':first-of-type').css('width', mainwidthinpercent+'%').addClass('active');   

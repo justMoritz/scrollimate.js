@@ -21,14 +21,18 @@ Each of the functionalities are implemented as methods of the scrollimate object
 (Parallax is called via the init method)
 
 The init function takes a single argument, an array of the methods you want to use, for example:
+
     scrollimata.init(['saScroll', 'parallax'])
+
 will initiate the Smooth Anchor Sroll and Parallax functions
 
 
 ### 2.) CALLING METHODS MANUALLY
 
 While you can call (almost) every method via *init*, you can also call the methods each manually, such as:
+
     scrollimate.saTabs();
+
 which will initiate the saTabs Function
 
 

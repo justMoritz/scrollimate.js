@@ -205,7 +205,7 @@ In the above example, the `.topnav` Element will get the `scrolling` class when 
 ---
 
 # SA Accordion
-(example: https://codepen.io/justMoritz/pen/rzVMgb)
+(examples: https://codepen.io/justMoritz/pen/vJVZVd)
 
 A simple _horizontal_ accordion for an infinite number of elements.
 

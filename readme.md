@@ -16,23 +16,19 @@ Include jQuery. Include scrollimate.js.
 Each of the functionalities are implemented as methods of the scrollimate object. That means you just need to call the method you want, or you can use the handy init function and just need one call for them all!
 
 
-### INIT FUNCTION
+### 1.) INIT FUNCTION
 
 (Parallax is called via the init method)
 
 The init function takes a single argument, an array of the methods you want to use, for example:
-
     scrollimata.init(['saScroll', 'parallax'])
-
 will initiate the Smooth Anchor Sroll and Parallax functions
 
 
-### CALLING METHODS MANUALLY
+### 2.) CALLING METHODS MANUALLY
 
 While you can call (almost) every method via *init*, you can also call the methods each manually, such as:
-
     scrollimate.saTabs();
-
 which will initiate the saTabs Function
 
 

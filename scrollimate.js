@@ -334,51 +334,49 @@ var scrollimate = (function( window, $ ){
   /* * Accordion Functionaliy * */
   var saAccordion = function(element, mainwidthinpercent, type, imageaspectratio){
     var __accordionHelper = function(){
+      var $element = $(element);
       if (mainwidthinpercent === undefined){
         mainwidthinpercent = '50';
       }
       // number of elements
-      var numEl = $(element).length;
+      var numEl = $element.length;
       var restwidth = (100-mainwidthinpercent)/(numEl-1);
 
       // desktop functionality
       if ( $(window).width() > 767) {    
         // if no imageaspectratio is given, default to 33%  
         if(imageaspectratio === undefined){ imageaspectratio = "33%" ;}
-        // console.log(imageaspectratio);
-        $(element).css('padding-bottom', imageaspectratio); // we may want to get this number from the user via an argument
-        $(element).css('width', restwidth+'%').removeClass('active');
+        $element.css('float', 'left');
+        $element.css('padding-bottom', imageaspectratio); 
+        $element.css('width', restwidth+'%').removeClass('active');
         $(element+':first-of-type').css('width', mainwidthinpercent+'%').addClass('active');   
       } 
       // mobile functionality
       else{
-        $(element).css('width', '100%');
-        $(element).css('height', 0).css('padding-bottom', restwidth+'%').removeClass('active');
+        $element.css('width', '100%');
+        $element.css('height', 0).css('padding-bottom', restwidth+'%').removeClass('active');
         $(element+':first-of-type').css('height', 0).css('padding-bottom', mainwidthinpercent+'%').addClass('active');   
       }
 
       // if no type is given, default to click
       if (type === undefined){ type = 'click'; }
-      $(element).on(type, function(){
+      $element.on(type, function(){
         // desktop functionality
-        if ( $(window).width() > 767) {      
-          ////// console.log('desktop!');
-          $(this).css('width', mainwidthinpercent+'%').addClass('active');    
-          $(element).css('width', restwidth+'%').removeClass('active');
+        if ( $(window).width() > 767) {   
+          console.log(restwidth);
+          $element.css('width', restwidth+'%').removeClass('active');
           $(this).css('width', mainwidthinpercent+'%').addClass('active'); 
         } 
         // mobile functionality
         else{
-          ////// console.log('mobile');
-          $(element).css('width', '100%');
-          $(this).css('height', 0).css('padding-bottom', mainwidthinpercent+'%').addClass('active');    
-          $(element).css('height', 0).css('padding-bottom', restwidth+'%').removeClass('active');
+          $element.css('width', '100%');   
+          $element.css('height', 0).css('padding-bottom', restwidth+'%').removeClass('active');
           $(this).css('height', 0).css('padding-bottom', mainwidthinpercent+'%').addClass('active'); 
         } 
       });
 
       setTimeout(function(){
-        $(element).css('transition', 'all 0.6s');
+        $element.css('transition', 'all 0.6s');
       }, 1000);
     };
     __accordionHelper();

@@ -224,5 +224,5 @@ SA Accordion takes **at** **least** **one**, but can take four arguments:
 3. (optional) The type of event that raises the change over the element selected in argument 1. Can be click, mouseover, mouseout, etc. If left blank, defaults to CLICK
 4. (optional) You can determin the height of the element, in pixels, or in percent of the width of the individual element. (This is done via padding-bottom)
 
-
+Please note that SA Accordion works with float: left;, and will take up 100% of the width of its container, so please plan your markup accordingly. 
 

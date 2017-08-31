@@ -4,8 +4,30 @@ Finally, the first version of scrollimate after years of having only indivdual c
 
 Scrollimate focuses on features and functions related to scrolling, animations (hence the name), but includes also other functionalities.
 
+## Table of Contents
 
-## Usage & Setup: 
+- [Setup and Usage](#setup)
+     - [Init Method](#init)
+     - [Calling Methods Manually](#manually)
+
+- [The Methods](#methods)
+     - [SA Parallax](#saParallax)
+         - [Basic Setup](#saParallaxBasic)
+         - [Advnaced Setup](#saParallaxAdvanced)
+         - [Mobile Control](#saParallaxAdvanced)
+     - [SA (Smooth Anchor) Scroll](#saScroll)
+         - [Basic Setup](#saScrollBasic)
+     - [SA Tabs](#saTabs)
+         - [Markup](#saTabsMarkup)
+         - [Setup](#saTabsSetup)
+         - [Exclusion](#saTabsExclusion)
+     - [SA Scroll Class](#saScrollclass)
+         - [Baisc Setup](#saScrollclassBasic)
+     - [SA Accordion](#saAccordion)
+         - [Basic Setup](#saAccordionBasic)
+         - [Advanced](#saAccordionAdvanced)
+
+## <a name="setup"></a>Setup and Usage: 
 
 This is a *jQuery Plugin*, so you'll need jQuery. 
 Include jQuery. Include scrollimate.js.
@@ -16,18 +38,18 @@ Include jQuery. Include scrollimate.js.
 Each of the functionalities are implemented as methods of the scrollimate object. That means you just need to call the method you want, or you can use the handy init function and just need one call for them all!
 
 
-### 1.) INIT FUNCTION
+### <a name="init"></a>1.) INIT METHOD
 
 (Parallax is called via the init method)
 
 The init function takes a single argument, an array of the methods you want to use, for example:
 
-    scrollimata.init(['saScroll', 'parallax'])
+    scrollimate.init(['saScroll', 'parallax'])
 
 will initiate the Smooth Anchor Sroll and Parallax functions
 
 
-### 2.) CALLING METHODS MANUALLY
+### <a name="manually"></a>2.) CALLING METHODS MANUALLY
 
 While you can call (almost) every method via *init*, you can also call the methods each manually, such as:
 
@@ -36,26 +58,27 @@ While you can call (almost) every method via *init*, you can also call the metho
 which will initiate the saTabs Function
 
 
-## The Methods
+## <a name="methods"></a>The Methods
 
 What does Scrollimate Entail? Let's take a look:
 
----
+
 ---
 
-# SA Parallax
+
+# <a name="saParallax"></a>SA Parallax
 ![SA PARALLAX SAMPLE](http://files.moritzzimmer.com/saparallax.gif)
 
 The original scrollimate function. You **_have to_** call SA Parallax with the **init** function.
 
-#### BSAIC SETUP:
+#### <a name="saParallaxBasic"></a>BASIC SETUP:
 
 1. Follow the Instructions for Scrollimate Installation
 2. add the following data-attribute to the element you wish to parallax scroll: `data-sabglayer`
 3. Call the init Function with:
   `<script> scrollimate.init(['saParallax']); </script>`
 
-#### ADVANCED SETUP:
+#### <a name="saParallaxAdvnaced"></a>ADVANCED SETUP:
 ![SA PARALLAX SAMPLE](http://files.moritzzimmer.com/saparallax3.gif)
 
 See how in this example, the top hero-image parallaxes right away, but each following elements (images) only when it comes into view, and consistently for each element? SA Parallax can do that!
@@ -75,7 +98,7 @@ With this, you can define the position of parallaxing element. This is useful if
 *More importantly*, giving this attribute is useful if the element you wish to parallax is not at the top. The element will only _start_ parallaxing _once in view_, and will be offset by the number specified. (If the second argument is not given, the element will start parallaxing from the very moment the page scrolls).
 
 
-#### Mobile Control ####
+#### <a name="saParallaxMobile"></a>Mobile Control ####
 
 By default, parallax will not be enabled on screen sizes smaller than 768px. (Sidenote: This applies to initial screen-size: Whatever your page loaded with, determined whether or not parallax is enabled. This is by design so that check is not performed over and over).
 
@@ -85,29 +108,28 @@ By default, parallax will not be enabled on screen sizes smaller than 768px. (Si
 
 ---
 
-# SA (Smooth Anchor) Scroll
+# <a name="saScroll"></a>SA (Smooth Anchor) Scroll
 ![SMOOTH ANCHOR SCROLL SAMPLE](http://files.moritzzimmer.com/smoothanchorscroll.gif)
 
 Smoothly scrolls to elements on websites that contain anchor scrolls. Instead of jumping to a point in the page, website scrolls smoothly (and at a consistent speed) to each anchor.
 
-#### BSAIC SETUP:
+#### <a name="saScrollBasic"></a>BASIC SETUP:
 
 1. Follow the Instructions for Scrollimate Installation
 2. Call the Method once on the page: `<script> scrollimate.saScroll; </script>` (You may also use the init function by supplying 'saScroll' as an additional argument)
 
 ---
----
 
-# SA Tabs 
+# <a name="saTabs"></a>SA Tabs 
 ![TABSCROLL SAMPLE](http://files.moritzzimmer.com/tabscroll.gif)
 
 Create simple, bookmarable, browser-history-respecting tab content on any website. No cluttered Markup: You just need to add **_one_** custom data-attribute.
 
 
-### MARKUP:
+### <a name="saTabsMarkup"></a>MARKUP:
 You need to have two things: 
 
-#### 1.) A Navigation of links, with each link wrapped in a parent.
+#### <a name="saTabsMarkupNav"></a>1.) A Navigation of links, with each link wrapped in a parent.
 
 In the collection of links, link the links via #s to the sections. 
 For example, you may have two divs, one has the id of `id="one"`, the other `id="two"`
@@ -143,7 +165,7 @@ Wrap each parent to a link in another parent, and give it the following attribut
     </div>
 
 
-#### 2.) A collection of "tabs", the content you want to display as tabs.
+#### <a name="saTabsMarkupTabs"></a>2.) A collection of "tabs", the content you want to display as tabs.
 I recommend it to look something like this:
 
     <div>
@@ -168,30 +190,29 @@ I recommend it to look something like this:
 
 Note: (The class for the active tab on the navigation is `.tabscroll_activeNavi`)
 
-### SETUP:
+### <a name="saTabsSetup"></a>SETUP:
 
 1. Follow the Instructions for Scrollimate Installation
 2. Call the Method once on the page:
   `<script> scrollimate.saTabs; </script>` (You may also use the init function by supplying 'saScroll' as an additional argument)
 
-#### EXCLUSION
+### <a name="saTabsExclusion"></a>EXCLUSION
 
 You want to have a link within your navigation that does something else. An external link, a popup link, etc. This is possible by simply adding the `data-saexclude` attribute to the anchor element.
 
 ---
 ---
 
-# SA Scroll Class
+# <a name="saScrollclass"></a>SA Scroll Class
 
 Will add a specifiable class to any element when a target element is scrolled, and remove it when it stops scrolling.  
 
 _as of right now, this method_  **_cannot_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
 
-#### BASIC SETUP:
+#### <a name="saScrollclassBasic"></a>BASIC SETUP:
 
 - Follow the Instructions for Installation 
 - Call the Method once on the page: `<script> scrollimate.scrollClass( $(window), $('.topnav'), 'scrolling' ); </script>` 
-
 
 SA Scroll Class takes three arguments:
 
@@ -204,18 +225,20 @@ In the above example, the `.topnav` Element will get the `scrolling` class when 
 ---
 ---
 
-# SA Accordion
+# <a name="saAccordion"></a>SA Accordion
 (examples: https://codepen.io/justMoritz/pen/vJVZVd)
 
 A simple _horizontal_ accordion for an infinite number of elements.
 
 _as of right now, this method_  **_cannot_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
 
-#### BSAIC SETUP:
+#### <a name="saAccordionBasic"></a>BASIC SETUP:
 
 1. You will need any number elements with the same selector, for example 5 divs with the class of `element`. _please float these elements left, inline or inline-block the, so they will be next to each other_ . Clearing the float etc. will be up to you.
 2. Follow the Instructions for Scrollimate Installation
 3. Call the Method once on the page with _two arguments_ like so: `<script> saAccordion('.element', '66.66'); </script>` 
+
+#### <a name="saAccordionAdvanced"></a>Advanced SETUP:
 
 SA Accordion takes **at** **least** **one**, but can take four arguments:
 

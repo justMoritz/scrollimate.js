@@ -9,7 +9,6 @@ Scrollimate focuses on features and functions related to scrolling, animations (
 - [Setup and Usage](#setup)
      - [Init Method](#init)
      - [Calling Methods Manually](#manually)
-
 - [The Methods](#methods)
      - [SA Parallax](#saParallax)
          - [Basic Setup](#saParallaxBasic)

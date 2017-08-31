@@ -61,9 +61,8 @@ which will initiate the saTabs Function
 
 What does Scrollimate Entail? Let's take a look:
 
-
 ---
-
+---
 
 # <a name="saParallax"></a>SA Parallax
 ![SA PARALLAX SAMPLE](http://files.moritzzimmer.com/saparallax.gif)
@@ -106,6 +105,7 @@ By default, parallax will not be enabled on screen sizes smaller than 768px. (Si
 (If you are running the init function with other methods the order doens't matter, as long as saParallax gets called last).
 
 ---
+---
 
 # <a name="saScroll"></a>SA (Smooth Anchor) Scroll
 ![SMOOTH ANCHOR SCROLL SAMPLE](http://files.moritzzimmer.com/smoothanchorscroll.gif)
@@ -117,6 +117,7 @@ Smoothly scrolls to elements on websites that contain anchor scrolls. Instead of
 1. Follow the Instructions for Scrollimate Installation
 2. Call the Method once on the page: `<script> scrollimate.saScroll; </script>` (You may also use the init function by supplying 'saScroll' as an additional argument)
 
+---
 ---
 
 # <a name="saTabs"></a>SA Tabs 

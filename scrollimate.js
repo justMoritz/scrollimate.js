@@ -20,36 +20,15 @@ var scrollimate = (function( window, $ ){
     isMObile: false,
   };
 
-
-  /* * Function that checks whether or not we are on a mobile device by userAgent string. * */
-  var _mobileCheck = function(){
-    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-      _global.$isMObile = true;
-    }
-  };
-
   /* * checks and sets variable that enables parallax even on mobile in init function * */
   var enableMobile = function(){
     _global.mobileEnabled = true;
   };
 
-  /* * Debounce Function, not currently used * */
-  _debounce = function(func, wait, immediate) {
-    var timeout;
-    return function() {
-      var context = this, args = arguments;
-      var later = function() {
-        timeout = null;
-        if (!immediate){ func.apply(context, args);}
-      };
-      var callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow){ func.apply(context, args);}
-    };
-  };
-
-  /* * General Functionality * */
+  /* *
+   * Executes Functions based on input String.
+   * Currently does not support arguments
+   */
   var _executeFunctionByName = function (functionName) {
     var context = window;
     var namespaces = functionName.split(".");
@@ -60,20 +39,35 @@ var scrollimate = (function( window, $ ){
     return context[func].apply(context);
   };
 
-//           saBgLayers: $saBgLayers[i],
-//           topoffset:  topoffset,
-//           globalsaWinHi: _global.saWinHi,
-//           speed: $speed,
-//           elHeight: elHeight,
-//           percent: '-50%',
-//           posFlag: posFlag
+  /* * Parallax Functionality * * /
+   * 
+   *
+   * The Parallax Animation Chain works as follows: 
+   * 1.) Init -> 
+   * 2.) -> saParallax (setup); 
+   *
+   * 3.) Scroll Listener (inside Init) -> 
+   * 4.) -> _saParallaxAnimation ->
+   * 5.) -> __saParallaxHelperFunction
+   *
+   * 
+   * 5: __saParallaxHelperFunction: 
+   *    Takes the inputOpject object generated inside _saParallaxAnimation 
+   *    to do the actual calculations as they are applied to the individual 
+   *    Elements. 
+   *    This function also checks whether or not the code is run in a mobile
+   *    viewport size, and if so, whether or not it has been indicated that
+   *    the code will run in mobile (which by default it does not) 
+   *
+   *    In case of non-parallax mobile, the final else statement resets all 
+   *    transformations that may have already happened. This is useful in case
+   *    The window is resized from a non-mobile size to a mobile size after 
+   *    transformations have already occurred.
+   *   
+   */
+  var __saParallaxHelperFunction = function(inputObject){
 
-  /* * Parallax Functionality * */
-  // var __parallaxHelperFunction = function( saBg, tOfSet, winHi, spd, elHeight, left, flag ){
-  var __parallaxHelperFunction = function( inputObject ){
-
-    // Helper Function
-    var ___execute = function(){
+    var ___executeHelperFunction = function(){
       if(inputObject.flag === 0){
         inputObject.tOfSet = 0;
         inputObject.winHi = 0;
@@ -83,14 +77,12 @@ var scrollimate = (function( window, $ ){
       $(inputObject.saBg).css("-ms-transform", "translate("+inputObject.left+", "+Math.floor((((_global.wp-inputObject.tOfSet+inputObject.winHi)/2)*inputObject.spd)+inputObject.elHeight)+"px)"); 
     };
      
-    // Not sure why the check in the init function does not always work 100%, so this is a workaround for now :/
     if(_global.mobileEnabled === true){
-      ___execute();
+      ___executeHelperFunction();
     }
     else{
-      // if ( !_global.$isMObile ) {      
       if ( $(window).width() > 767) {
-        ___execute();
+        ___executeHelperFunction();
       }
       /* Resets all transformations that may have already happened before the window was resized below 768px */
       else{
@@ -99,25 +91,30 @@ var scrollimate = (function( window, $ ){
     }      
   };
 
-  var _parallaxAnimation = function($saBgLayers){
-    // loops through each element that is in the scrollimateBgLayers array
+  /**
+   *
+   *    Loops through each of the saBgLayers elements. (from saParallax function),
+   *    parses and splits the data-attribute arguments. First is speed, second is position.
+   *
+   *    If only more than argument is given set posFlag to 1, which will cause the
+   *    element to only start parallaxing once in view, and be offset by the number specified.
+   *    elHeight gets passed into the __saParallaxHelperFunction.
+   *    If second argument is not given, element starts parallaxing from the moment page loads.
+   *
+   */
+  var _saParallaxAnimation = function($saBgLayers){
     for (i = 0 ; i < $saBgLayers.length ; i++){
-
       var posFlag = 0;
       var topoffset = $($saBgLayers[i]).offset().top; 
       var elHeight  = $($saBgLayers[i]).css('height');
       elHeight = parseInt(elHeight, 10);
 
-      // parses the data-attribute to read the arguments. First one is speed, second is position
       var dataBgAttributes = $($saBgLayers[i]).attr('data-sabglayer').split(', ');
 
-      // if only more than argument is given set posFlag to 1,
-      //  which will cause the element to only start parallaxing once in view, and will be offset by the number specified
       if( dataBgAttributes.length > 1 ){
         posFlag = 1;
         elHeight = elHeight*dataBgAttributes[1];
       }
-      // if the second argument is not given, the element will  start parallaxing from the very moment the page loads
 
       if( topoffset < _global.wp+_global.saWinHi){
         // offsets the scrolling in a paralax sort of way.
@@ -131,7 +128,6 @@ var scrollimate = (function( window, $ ){
           $speed = dataBgAttributes[0]; 
         }
 
-        // saBg, tOfSet, winHi, spd, elHeight, left, flag
         parallaxHelperConfig = {
           saBg: $saBgLayers[i],
           tOfSet:  topoffset,
@@ -145,27 +141,15 @@ var scrollimate = (function( window, $ ){
         // keep the translateX attribute currently present
         if ($($saBgLayers[i]).css("transform") === "translateX(-50%)"){
           parallaxHelperConfig.left = '-50%';
-          __parallaxHelperFunction( parallaxHelperConfig );
+          __saParallaxHelperFunction( parallaxHelperConfig );
         }
         else{
-          __parallaxHelperFunction( parallaxHelperConfig );
+          __saParallaxHelperFunction( parallaxHelperConfig );
         }
-          // }
       }
     }
   };
 
-  /* 
-   *
-   * Parallax Animation Chain works as follows: 
-   * 1.) Init -> 
-   * 2.) -> saParallax (setup); 
-   *
-   * 3.) Scroll Listener (inside Init) -> 
-   * 4.) -> _parallaxAnimation ->
-   * 5.) -> __parallaxHelperFunction
-   *
-   */
   var saParallax = function () {     
     // gets all elelemts with the data-sabglayer attribute
     _global.saBgLay = $("[data-sabglayer]");  
@@ -185,11 +169,11 @@ var scrollimate = (function( window, $ ){
       }
 
       // makes sure evertyhing is drawn the first initial time.
-      _parallaxAnimation(_global.saBgLay);
+      _saParallaxAnimation(_global.saBgLay);
 
       // makes sure the boxes are drawn accodringly if the window is resized
       $(window).resize(function(){
-          _parallaxAnimation(_global.saBgLay); 
+          _saParallaxAnimation(_global.saBgLay); 
       });
       
       console.log('parallax initiated');
@@ -223,10 +207,10 @@ var scrollimate = (function( window, $ ){
 
     // checks the current location, matches it to the href-containing link, and adds correct class to parent
     var __activeClassHelperFunction = function($inputLoc){
-      for (i=0; i<$tabscroll_anchors.length; i++){
-        if( $($tabscroll_anchors[i]).attr('href') === "#"+$inputLoc ){
+      for (i=0; i<$tabscrollAnchors.length; i++){
+        if( $($tabscrollAnchors[i]).attr('href') === "#"+$inputLoc ){
           $('.tabscroll_activeNavi').removeClass('tabscroll_activeNavi');
-          $($tabscroll_anchors[i]).parent().addClass('tabscroll_activeNavi');
+          $($tabscrollAnchors[i]).parent().addClass('tabscroll_activeNavi');
         }
       }
     };
@@ -270,21 +254,21 @@ var scrollimate = (function( window, $ ){
 
     function setUpPage() {
       // finds all anchor tabs within the data-tabscrollnavcontainer
-      $tabscroll_anchors = $("[data-tabscrollnavcontainer]").find("a").not("[data-saexclude]");
+      $tabscrollAnchors = $("[data-tabscrollnavcontainer]").find("a").not("[data-saexclude]");
 
       // if we pass a type in here, we can control the method of change. Right now we can do fade, slide and none.
       $transition_type = $("[data-tabscrollnavcontainer]").attr("data-tabscrollnavcontainer");
       
       // adds the active class to the first tab-navigation
-      $($tabscroll_anchors[0]).parent().addClass("tabscroll_activeNavi");
+      $($tabscrollAnchors[0]).parent().addClass("tabscroll_activeNavi");
 
-      for ($i = 0; $i < $tabscroll_anchors.length; $i++){
+      for ($i = 0; $i < $tabscrollAnchors.length; $i++){
 
         // targets each and every link's href-attribute found within the tabscrollnavcontainer
-        var $eachAnchor = $($tabscroll_anchors[$i]).attr("href");
+        var $eachAnchor = $($tabscrollAnchors[$i]).attr("href");
     
         // adds the navigational data-attribute to each anchor tag's parent
-        $($tabscroll_anchors[$i]).parent().attr("data-tabscrollnavi", $eachAnchor.substring(1)); 
+        $($tabscrollAnchors[$i]).parent().attr("data-tabscrollnavi", $eachAnchor.substring(1)); 
         
         // we then use this anchor to find each element, section, etc. that has the 
         // same ID as the anchor tag we found.
@@ -403,7 +387,6 @@ var scrollimate = (function( window, $ ){
     window.addEventListener('resize', function () {
       __accordionHelper();
     });
-    
   };
 
 
@@ -411,8 +394,6 @@ var scrollimate = (function( window, $ ){
   var init = function(input){
     console.log('Running Scrollimate with the following input: ' + input );
 
-    _mobileCheck();
-    
     // Document Ready 
     $(function(){
 
@@ -421,10 +402,6 @@ var scrollimate = (function( window, $ ){
       // updates in case of window resize
       $(window).resize(function(){
         _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
-
-        // checks to see if user agent has changed. Seems pointless, but helps with chrome dev tools
-        _mobileCheck();
-
       });
 
       for(i=0; i < input.length; i++){
@@ -432,30 +409,17 @@ var scrollimate = (function( window, $ ){
         _executeFunctionByName("scrollimate."+input[i]+"");
       }
 
-
-      /* Theoretical Example of debouncing, does not work that well */
-      // $('[data-sabglayer]').css('transition', 'all 0.075s');
-      var __debouncedParallax = _debounce(function() {
-        __windowScrollHelper();
-      }, 5);
-      /* End Debounce */
-
-
       // Code that initiates the window scroll listener, and all code (parallax or otherwise) that goes with it.
       // when the window is scrolled
       $(window).scroll( function(){
         // updates the window position variable
         _global.wp = $(window).scrollTop();
 
-        // console.log( _global.screenSizeMobile );
-
-        /* * Mobile checking moved inside the __parallaxHelperFunction function (the final stage of the parallax animatino chain)* */
+        /* * Mobile checking moved inside the __saParallaxHelperFunction function (the final stage of the parallax animatino chain)* */
         if( _global.prlx ){
-          _parallaxAnimation(_global.saBgLay); 
+          _saParallaxAnimation(_global.saBgLay); 
         }
-
       });
-
     });
   };
 

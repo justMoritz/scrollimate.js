@@ -60,19 +60,27 @@ var scrollimate = (function( window, $ ){
     return context[func].apply(context);
   };
 
+//           saBgLayers: $saBgLayers[i],
+//           topoffset:  topoffset,
+//           globalsaWinHi: _global.saWinHi,
+//           speed: $speed,
+//           elHeight: elHeight,
+//           percent: '-50%',
+//           posFlag: posFlag
 
   /* * Parallax Functionality * */
-  var __parallaxHelperFunction = function( saBg, tOfSet, winHi, spd, elHeight, left, flag ){
+  // var __parallaxHelperFunction = function( saBg, tOfSet, winHi, spd, elHeight, left, flag ){
+  var __parallaxHelperFunction = function( inputObject ){
 
     // Helper Function
     var ___execute = function(){
-      if(flag === 0){
-        tOfSet = 0;
-        winHi = 0;
-        elHeight = 0;
+      if(inputObject.flag === 0){
+        inputObject.tOfSet = 0;
+        inputObject.winHi = 0;
+        inputObject.elHeight = 0;
       }
-      $(saBg).css("transform", "translate3d("+left+", "+Math.floor((((_global.wp-tOfSet+winHi)/2)*spd)+elHeight)+"px, 0px)");       
-      $(saBg).css("-ms-transform", "translate("+left+", "+Math.floor((((_global.wp-tOfSet+winHi)/2)*spd)+elHeight)+"px)"); 
+      $(inputObject.saBg).css("transform", "translate3d("+inputObject.left+", "+Math.floor((((_global.wp-inputObject.tOfSet+inputObject.winHi)/2)*inputObject.spd)+inputObject.elHeight)+"px, 0px)");       
+      $(inputObject.saBg).css("-ms-transform", "translate("+inputObject.left+", "+Math.floor((((_global.wp-inputObject.tOfSet+inputObject.winHi)/2)*inputObject.spd)+inputObject.elHeight)+"px)"); 
     };
      
     // Not sure why the check in the init function does not always work 100%, so this is a workaround for now :/
@@ -99,7 +107,6 @@ var scrollimate = (function( window, $ ){
       var topoffset = $($saBgLayers[i]).offset().top; 
       var elHeight  = $($saBgLayers[i]).css('height');
       elHeight = parseInt(elHeight, 10);
-      // elHeight = elHeight*0.125;
 
       // parses the data-attribute to read the arguments. First one is speed, second is position
       var dataBgAttributes = $($saBgLayers[i]).attr('data-sabglayer').split(', ');
@@ -124,12 +131,24 @@ var scrollimate = (function( window, $ ){
           $speed = dataBgAttributes[0]; 
         }
 
+        // saBg, tOfSet, winHi, spd, elHeight, left, flag
+        parallaxHelperConfig = {
+          saBg: $saBgLayers[i],
+          tOfSet:  topoffset,
+          winHi: _global.saWinHi,
+          spd: $speed,
+          elHeight: elHeight,
+          left: '0px' ,
+          flag: posFlag
+        };
+
         // keep the translateX attribute currently present
         if ($($saBgLayers[i]).css("transform") === "translateX(-50%)"){
-            __parallaxHelperFunction( $saBgLayers[i], topoffset, _global.saWinHi, $speed, elHeight, '-50%', posFlag);
+          parallaxHelperConfig.left = '-50%';
+          __parallaxHelperFunction( parallaxHelperConfig );
         }
         else{
-            __parallaxHelperFunction( $saBgLayers[i], topoffset, _global.saWinHi, $speed, elHeight, '0px', posFlag);
+          __parallaxHelperFunction( parallaxHelperConfig );
         }
           // }
       }

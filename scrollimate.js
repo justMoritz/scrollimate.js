@@ -14,18 +14,9 @@ var scrollimate = (function( window, $ ){
     prlx: false,
     speed: 1,
     saBgLay: [],
-    saItHgt: [],
     saWinHi: '',
     mobileEnabled: false,
     isMObile: false,
-  };
-
-
-  /* * Function that checks whether or not we are on a mobile device by userAgent string. * */
-  var _mobileCheck = function(){
-    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-      _global.$isMObile = true;
-    }
   };
 
   /* * checks and sets variable that enables parallax even on mobile in init function * */
@@ -33,23 +24,10 @@ var scrollimate = (function( window, $ ){
     _global.mobileEnabled = true;
   };
 
-  /* * Debounce Function, not currently used * */
-  _debounce = function(func, wait, immediate) {
-    var timeout;
-    return function() {
-      var context = this, args = arguments;
-      var later = function() {
-        timeout = null;
-        if (!immediate){ func.apply(context, args);}
-      };
-      var callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow){ func.apply(context, args);}
-    };
-  };
-
-  /* * General Functionality * */
+  /* *
+   * Executes Functions based on input String.
+   * Currently does not support arguments
+   */
   var _executeFunctionByName = function (functionName) {
     var context = window;
     var namespaces = functionName.split(".");
@@ -61,28 +39,49 @@ var scrollimate = (function( window, $ ){
   };
 
 
-  /* * Parallax Functionality * */
-  var __parallaxHelperFunction = function( saBg, tOfSet, winHi, spd, elHeight, left, flag ){
+  /* * Parallax Functionality * * /
+   * 
+   *
+   * The Parallax Animation Chain works as follows: 
+   * 1.) Init -> 
+   * 2.) -> saParallax (setup); 
+   *
+   * 3.) Scroll Listener (inside Init) -> 
+   * 4.) -> _saParallaxAnimation ->
+   * 5.) -> __saParallaxHelperFunction
+   *
+   * 
+   * 5: __saParallaxHelperFunction: 
+   *    Takes the inputOpject object generated inside _saParallaxAnimation 
+   *    to do the actual calculations as they are applied to the individual 
+   *    Elements. 
+   *    This function also checks whether or not the code is run in a mobile
+   *    viewport size, and if so, whether or not it has been indicated that
+   *    the code will run in mobile (which by default it does not) 
+   *
+   *    In case of non-parallax mobile, the final else statement resets all 
+   *    transformations that may have already happened. This is useful in case
+   *    The window is resized from a non-mobile size to a mobile size after 
+   *    transformations have already occurred.
+   */
+  var __saParallaxHelperFunction = function(inputObject){
 
-    // Helper Function
-    var ___execute = function(){
-      if(flag === 0){
-        tOfSet = 0;
-        winHi = 0;
-        elHeight = 0;
+    var ___executeHelperFunction = function(){
+      if(inputObject.flag === 0){
+        inputObject.tOfSet = 0;
+        inputObject.winHi = 0;
+        inputObject.elHeight = 0;
       }
-      $(saBg).css("transform", "translate3d("+left+", "+Math.floor((((_global.wp-tOfSet+winHi)/2)*spd)+elHeight)+"px, 0px)");       
-      $(saBg).css("-ms-transform", "translate("+left+", "+Math.floor((((_global.wp-tOfSet+winHi)/2)*spd)+elHeight)+"px)"); 
+      $(inputObject.saBg).css("transform", "translate3d("+inputObject.left+", "+Math.floor((((_global.wp-inputObject.tOfSet+inputObject.winHi)/2)*inputObject.spd)+inputObject.elHeight)+"px, 0px)");       
+      $(inputObject.saBg).css("-ms-transform", "translate("+inputObject.left+", "+Math.floor((((_global.wp-inputObject.tOfSet+inputObject.winHi)/2)*inputObject.spd)+inputObject.elHeight)+"px)"); 
     };
      
-    // Not sure why the check in the init function does not always work 100%, so this is a workaround for now :/
     if(_global.mobileEnabled === true){
-      ___execute();
+      ___executeHelperFunction();
     }
     else{
-      // if ( !_global.$isMObile ) {      
       if ( $(window).width() > 767) {
-        ___execute();
+        ___executeHelperFunction();
       }
       /* Resets all transformations that may have already happened before the window was resized below 768px */
       else{
@@ -91,32 +90,39 @@ var scrollimate = (function( window, $ ){
     }      
   };
 
-  var _parallaxAnimation = function($saBgLayers){
-    // loops through each element that is in the scrollimateBgLayers array
+  /**
+   *
+   * 4: _saParallaxAnimation: 
+   *    Loops through each of the saBgLayers elements. (from saParallax function),
+   *    parses and splits the data-attribute arguments. First is speed, second is position.
+   *
+   *    If only more than argument is given set posFlag to 1, which will cause the
+   *    element to only start parallaxing once in view, and be offset by the number specified.
+   *    elHeight gets passed into the __saParallaxHelperFunction.
+   *    If second argument is not given, element starts parallaxing from the moment page loads.
+   *
+   *    A parallaxHelperConfig object gets passed to __saParallaxHelperFunction,
+   *    which does the actual calculation. If an element been positioned in CSS with 
+   *    translateX(50%) to achieve centering, the 'left' entry in the object is changed accordingly.
+   *    Because of the horizontal nature of parallax scrolling, saParallax does not currently
+   *    support the prevervation of translateY(-50%), though this feature is planned for the future
+   */
+  var _saParallaxAnimation = function($saBgLayers){
     for (i = 0 ; i < $saBgLayers.length ; i++){
+      var posFlag = 0,
+          topoffset = $($saBgLayers[i]).offset().top,
+          elHeight  = $($saBgLayers[i]).css('height');
 
-      var posFlag = 0;
-      var topoffset = $($saBgLayers[i]).offset().top; 
-      var elHeight  = $($saBgLayers[i]).css('height');
       elHeight = parseInt(elHeight, 10);
-      // elHeight = elHeight*0.125;
 
-      // parses the data-attribute to read the arguments. First one is speed, second is position
       var dataBgAttributes = $($saBgLayers[i]).attr('data-sabglayer').split(', ');
 
-      // if only more than argument is given set posFlag to 1,
-      //  which will cause the element to only start parallaxing once in view, and will be offset by the number specified
       if( dataBgAttributes.length > 1 ){
         posFlag = 1;
         elHeight = elHeight*dataBgAttributes[1];
       }
-      // if the second argument is not given, the element will  start parallaxing from the very moment the page loads
 
       if( topoffset < _global.wp+_global.saWinHi){
-        // offsets the scrolling in a paralax sort of way.
-        // we are taking the initial height, adding it and then moving it accordingly in the opposite direction of the scroll.
-
-        // if we have a number in the data-sabglayer, use as speed, if not, default to standard
         if ( $($saBgLayers[i]).attr("data-sabglayer") === "" )  {
           $speed = 1;
         }
@@ -124,54 +130,50 @@ var scrollimate = (function( window, $ ){
           $speed = dataBgAttributes[0]; 
         }
 
-        // keep the translateX attribute currently present
+        parallaxHelperConfig = {
+          saBg: $saBgLayers[i],
+          tOfSet:  topoffset,
+          winHi: _global.saWinHi,
+          spd: $speed,
+          elHeight: elHeight,
+          left: '0px' ,
+          flag: posFlag
+        };
+
         if ($($saBgLayers[i]).css("transform") === "translateX(-50%)"){
-            __parallaxHelperFunction( $saBgLayers[i], topoffset, _global.saWinHi, $speed, elHeight, '-50%', posFlag);
+          parallaxHelperConfig.left = '-50%';
+          __saParallaxHelperFunction( parallaxHelperConfig );
         }
         else{
-            __parallaxHelperFunction( $saBgLayers[i], topoffset, _global.saWinHi, $speed, elHeight, '0px', posFlag);
+          __saParallaxHelperFunction( parallaxHelperConfig );
         }
-          // }
       }
     }
   };
 
-  /* 
+  /**
    *
-   * Parallax Animation Chain works as follows: 
-   * 1.) Init -> 
-   * 2.) -> saParallax (setup); 
+   * 2: saParallax: 
+   *    Intial Setup, parsing and first draw:
    *
-   * 3.) Scroll Listener (inside Init) -> 
-   * 4.) -> _parallaxAnimation ->
-   * 5.) -> __parallaxHelperFunction
+   *    Selects all the elelemts with the data-sabglayer attribute. These are stored inside 
+   *    a variable within the _global object, because it needs to stay accessible in the 
+   *    entire application, as it is continually used in the $(window).scroll and resize
+   *    functions initialized within the init method.
+   *  
+   *    Method only runs functionality if there are elements present (not no elements).
+   *    Then runs the initial parallax animation.
    *
+   *    Also finally sets the _global.prlx to true to make sure the scroll and resize functions
+   *    in the init method only calculate and call this function if everything is set.
    */
   var saParallax = function () {     
-    // gets all elelemts with the data-sabglayer attribute
+
     _global.saBgLay = $("[data-sabglayer]");  
     _global.saBgLay.css('will-change', 'transform');
 
-
-    // Only run functionality if there are not no elements
     if( _global.saBgLay.length !== 0 ){
-
-      // variable to hold the initial position from the top of each element.
-      _global.saItHgt = [];  
-
-      // gets the initial position from the top of each element
-      // (needed for absolutely positioned elements)
-      for (i = 0 ; i < _global.saBgLay.length ; i++){
-          _global.saItHgt[i] = $(_global.saBgLay[i]).offset().top;
-      }
-
-      // makes sure evertyhing is drawn the first initial time.
-      _parallaxAnimation(_global.saBgLay);
-
-      // makes sure the boxes are drawn accodringly if the window is resized
-      $(window).resize(function(){
-          _parallaxAnimation(_global.saBgLay); 
-      });
+      _saParallaxAnimation(_global.saBgLay);
       
       console.log('parallax initiated');
       _global.prlx = true;
@@ -179,139 +181,161 @@ var scrollimate = (function( window, $ ){
   };
 
 
-  /* * Smooth Anchor Scroll Functionality * */
+  /* * Smooth Anchor Scroll Functionality * * /
+   *
+   * Listens to hash fragment url click, then adds a little bit of time 
+   * to the scrolling based on how far the target is from the top to ensure
+   * that the scroll motion is always about the same percieved velocity.
+   * Page is animated to scroll from the top to the element that that matches 
+   * the href attribute. 
+   * return false to prevent default
+   */
   var saScroll = function() {
     console.log('saScroll initiated');
-      // on hash fragment url click
       $('[href^="#"]').click(function(){
-        // adds a little bit of time to the scrolling based on how far the target is from the top 
-        // ensures that the scroll motion is about the same percieved velocity 
         var smoothAnchorScrollTime = 500 + (Math.floor($($(this).attr("href")).offset().top))/2;
-        // animate the page
         $('html, body').animate({
-            //to scroll from the top to the href attribute 
             scrollTop: $( $(this).attr('href') ).offset().top
-            // plan to make this time dynamic by calculating the offset from the top and then doing some math
         }, smoothAnchorScrollTime);
-        // prevent default
         return false;
       });  
   };
 
 
-  /* * Tabs Functionality * */
-  var saTabs = function () {
+  /* * SA Tabs Functionality * * /
+   * 
+   *
+   * The SA Tabs Functionality Chain: 
+   * 1.) saTabs ->
+   * 1.1) -> 3
+   * 1.2) -> (Hash Change Listener, triggers 3)
+   *
+   * 2.) _saTabsSetUpPage
+   * 3.) _saTabsHashChangeFunct
+   *
+   * 
+   * 2: _saTabsSetUpPage: 
+   *    Finds all anchor tabs within the data-tabscrollnavcontainer and reads the attribute.
+   *    If a type was passed here, it will control the method of change: fade, slide and none.
+   *    The active class is added to the first tab-navigation
+   *
+   *    Then loops and targets each and every link's href-attribute found within the tabscrollnavcontainer
+   *    and adds the navigational data-attribute to each anchor tag's parent
+   *      
+   *    We then use this anchor to find each element, section, etc. that has the 
+   *    same ID as the anchor tag we found.
+   *
+   *    Final section sets a custom data-tabscroll attribute to each section that correspons
+   *    with the link in the navigation, stripping off the # (substring)
+   *
+   *    Also Removes each id tag of an data-tabscroll element (to help some browsers prevent)
+   *    default behaviour, and hiding all sections initially except the one specified.
+   */
+  var _saTabsSetUpPage = function() {
+    $tabscrollAnchors = $("[data-tabscrollnavcontainer]").find("a").not("[data-saexclude]");
+    $transition_type = $("[data-tabscrollnavcontainer]").attr("data-tabscrollnavcontainer");
+    $($tabscrollAnchors[0]).parent().addClass("tabscroll_activeNavi");
 
-    // checks the current location, matches it to the href-containing link, and adds correct class to parent
+    for ($i = 0; $i < $tabscrollAnchors.length; $i++){
+      var $eachAnchor = $($tabscrollAnchors[$i]).attr("href");
+      $($tabscrollAnchors[$i]).parent().attr("data-tabscrollnavi", $eachAnchor.substring(1)); 
+      $($eachAnchor).attr("data-tabscroll", $eachAnchor.substring(1));
+    }    
+    
+    $("[data-tabscroll]").removeAttr('id');
+    $("[data-tabscroll]:first-of-type").siblings("[data-tabscroll]").hide();   
+  };
+
+  /**
+   *
+   * 3: _saTabsHashChangeFunct: 
+   *    Called both initially in saTabs and also on each Hash (URL fragment) change, monitured
+   *    by the saTabs Method.
+   *
+   *    Writing the URL that raised the event into a string, stripping off everything before the hash
+   *    In order to parse the users navigational input.
+   *
+   *    If there is no hash (or it set to 'all'), show only the first section of tab content.
+   *    If there is a hash-link active, function will hide all tabs, fade in only the tab with 
+   *    the data-tabscroll attribute corresponding to the link that was clicked.
+   *
+   *    Finally, also checks for the 'fade' and 'slide' transition types, and executes different 
+   *    funcionality, which I would like to break out into different functions eventually.
+   */
+  var _saTabsHashChangeFunct = function() {
+    /* checks the current location, matches it to the href-containing link, and adds correct class to parent */
     var __activeClassHelperFunction = function($inputLoc){
-      for (i=0; i<$tabscroll_anchors.length; i++){
-        if( $($tabscroll_anchors[i]).attr('href') === "#"+$inputLoc ){
+      for (i=0; i<$tabscrollAnchors.length; i++){
+        if( $($tabscrollAnchors[i]).attr('href') === "#"+$inputLoc ){
           $('.tabscroll_activeNavi').removeClass('tabscroll_activeNavi');
-          $($tabscroll_anchors[i]).parent().addClass('tabscroll_activeNavi');
+          $($tabscrollAnchors[i]).parent().addClass('tabscroll_activeNavi');
         }
       }
     };
 
-    function hashChangeFunct () {
-      // writing the URL that raised the event into a string
-      var $location = String(document.location);
+    var $location = String(document.location);    
+    $location = $location = $location.split("#")[1];
 
-      // stripping off everything before the hash
-      $location = $location = $location.split("#")[1];
+    if ($location === undefined || $location === 'all' ){
+        $("[data-tabscroll]:first-of-type").show();   
+        $("[data-tabscroll]:first-of-type").addClass('activeTab');   
+    }
+    else{
+      $("[data-tabscroll]").hide().removeClass('activeTab');   
 
-      // if there is no hash, basically...
-      if ($location === undefined || $location === 'all' ){
-          // show only the first section
-          $("[data-tabscroll]:first-of-type").show();   
-          $("[data-tabscroll]:first-of-type").addClass('activeTab');   
+      if ( $transition_type === 'fade') {
+        $("[data-tabscroll='"+$location+"']").fadeIn().addClass('activeTab');   
+        __activeClassHelperFunction($location);
+
+      } 
+      else if ( $transition_type === 'slide') {
+        $("[data-tabscroll='"+$location+"']").slideDown().addClass('activeTab');   
+        __activeClassHelperFunction($location);
       }
-      // if there is a hash-link active
       else{
-        //hide all tabs
-        $("[data-tabscroll]").hide().removeClass('activeTab');   
+        $("[data-tabscroll='"+$location+"']").show().addClass('activeTab');   
+        __activeClassHelperFunction($location);
+      }
+    }             
+  };
 
-
-        // fade in only the tab with the data-tabscroll attribute corresponding
-        // to the link that was clicked.
-        if ( $transition_type === 'fade') {
-          $("[data-tabscroll='"+$location+"']").fadeIn().addClass('activeTab');   
-          __activeClassHelperFunction($location);
-
-        } 
-        else if ( $transition_type === 'slide') {
-          $("[data-tabscroll='"+$location+"']").slideDown().addClass('activeTab');   
-          __activeClassHelperFunction($location);
-        }
-        else{
-          $("[data-tabscroll='"+$location+"']").show().addClass('activeTab');   
-          __activeClassHelperFunction($location);
-        }
-      }             
-    }
-
-    function setUpPage() {
-      // finds all anchor tabs within the data-tabscrollnavcontainer
-      $tabscroll_anchors = $("[data-tabscrollnavcontainer]").find("a").not("[data-saexclude]");
-
-      // if we pass a type in here, we can control the method of change. Right now we can do fade, slide and none.
-      $transition_type = $("[data-tabscrollnavcontainer]").attr("data-tabscrollnavcontainer");
-      
-      // adds the active class to the first tab-navigation
-      $($tabscroll_anchors[0]).parent().addClass("tabscroll_activeNavi");
-
-      for ($i = 0; $i < $tabscroll_anchors.length; $i++){
-
-        // targets each and every link's href-attribute found within the tabscrollnavcontainer
-        var $eachAnchor = $($tabscroll_anchors[$i]).attr("href");
+  /**
+   *
+   * 1: saTabs: 
+   *    Runs the _saTabsSetUpPage function, the initial instance of the _saTabsHashChangeFunct,
+   *    then also monitors the hash change to run the _saTabsHashChangeFunct as needed.
+   *
+   *    Hash changed is implemented as follows:
+   *    Stores the previous hash, then listens if it has changed every frew millisectons
+   *    Needed for IE9. Adapted from https://stackoverflow.com/questions/680785/on-window-location-hash-change
+   *
+   *    (In previous versions, this had been triggered by $(window).on('hashchange', function (event) { )
+   */
+  var saTabs = function () {
+    _saTabsSetUpPage();
     
-        // adds the navigational data-attribute to each anchor tag's parent
-        $($tabscroll_anchors[$i]).parent().attr("data-tabscrollnavi", $eachAnchor.substring(1)); 
-        
-        // we then use this anchor to find each element, section, etc. that has the 
-        // same ID as the anchor tag we found.
-        
-        // sets a custom data-tabscroll attribute to each section that correspons
-        // with the link in the navigation, stripping off the # (substring)
-        $($eachAnchor).attr("data-tabscroll", $eachAnchor.substring(1));
-      }    
-    }
-     
-    setUpPage();
- 
-    // remove each id tag of an data-tabscroll element
-    $("[data-tabscroll]").removeAttr('id');
-     
-    // hiding all sections initially except the one specified.
-    $("[data-tabscroll]:first-of-type").siblings("[data-tabscroll]").hide();   
-    
-    /*
-     * stores the previous hash, then listens if it has changed every frew millisectons
-     * Needed for IE9. Adapted from https://stackoverflow.com/questions/680785/on-window-location-hash-change    
-     */
     var prevHash = window.location.hash;
     window.setInterval(function () {
       if (window.location.hash !== prevHash) {
         prevHash = window.location.hash;
-        hashChangeFunct();
+        _saTabsHashChangeFunct();
       }
     }, 100);
     
-    // initial Hash Change Setup
     $(window).load(function(){
-       hashChangeFunct();
+       _saTabsHashChangeFunct();
     });
 
-    /* // not currently used, left for reference
-    $(window).on('hashchange', function (event) {  
-      // triggers the hashchange manually on pageload. 
-      // Adapted from http://stackoverflow.com/questions/20652020/the-hashchange-event-of-jquery-doesnt-work-if-i-open-a-page-with-hash-directly
-    }).trigger('hashchange'); */
-
     console.log('saTabs initiated');
-  }; // End saTabs
+  }; 
  
 
-  /* * function adds class class to target element while and ONLY WHILE scrollingElement is scrolled * */ 
+  /**
+   *
+   * SA Scroll Class: 
+   *
+   * Function adds class class to target element while and ONLY WHILE scrollingElement is scrolled
+   */ 
   var saScrollClass = function ( $scrollingElement, $target, classname ){
     $target.addClass('scrollprep');
     var timer,
@@ -331,9 +355,18 @@ var scrollimate = (function( window, $ ){
   };
 
 
-  /* * Accordion Functionaliy * */
+  /**
+   *
+   * SA Accordion Functionality: 
+   * 
+   * Function consists mainly of the __saAccordionHelper function, 
+   * which is called on initial load, and also every time the window is resized,
+   * for resizing.
+   *
+   *    
+   */
   var saAccordion = function(element, mainwidthinpercent, type, imageaspectratio){
-    var __accordionHelper = function(){
+    var __saAccordionHelper = function(){
       var $element = $(element);
       if (mainwidthinpercent === undefined){
         mainwidthinpercent = '50';
@@ -379,68 +412,57 @@ var scrollimate = (function( window, $ ){
         $element.css('transition', 'all 0.6s');
       }, 1000);
     };
-    __accordionHelper();
+    __saAccordionHelper();
 
     window.addEventListener('resize', function () {
-      __accordionHelper();
+      __saAccordionHelper();
     });
-    
   };
 
 
-  /* * Init Function * */
+  /** 
+    * Init Function 
+    * 
+    * On Document Ready, calculates the height of viewport (window Height)
+    *
+    * Parses the arguments-array given to the init method's call, loops through
+    * them and then executes the function with the corresponding name. 
+    * No error-checking is currently enabled, but this may be a future feature addition 
+    *
+    * On Window Resize, re-calculate the window height, and re-run parallax, if is enabled
+    * On window scroll, update the window position variable (_global.wp), and re-run parallax, if enabled
+    *
+    */
   var init = function(input){
     console.log('Running Scrollimate with the following input: ' + input );
 
-    _mobileCheck();
-    
-    // Document Ready 
     $(function(){
-
-      // height of viewport (window Height)
       _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
-      // updates in case of window resize
-      $(window).resize(function(){
-        _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
-
-        // checks to see if user agent has changed. Seems pointless, but helps with chrome dev tools
-        _mobileCheck();
-
-      });
 
       for(i=0; i < input.length; i++){
         console.log( input[i] );
         _executeFunctionByName("scrollimate."+input[i]+"");
       }
 
+      $(window).resize(function(){
+        _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
 
-      /* Theoretical Example of debouncing, does not work that well */
-      // $('[data-sabglayer]').css('transition', 'all 0.075s');
-      var __debouncedParallax = _debounce(function() {
-        __windowScrollHelper();
-      }, 5);
-      /* End Debounce */
+        if( _global.prlx ){
+          _saParallaxAnimation(_global.saBgLay); 
+        }
+      }); // end window resize
 
-
-      // Code that initiates the window scroll listener, and all code (parallax or otherwise) that goes with it.
-      // when the window is scrolled
       $(window).scroll( function(){
-        // updates the window position variable
         _global.wp = $(window).scrollTop();
 
-        // console.log( _global.screenSizeMobile );
-
-        /* * Mobile checking moved inside the __parallaxHelperFunction function (the final stage of the parallax animatino chain)* */
         if( _global.prlx ){
-          _parallaxAnimation(_global.saBgLay); 
+          _saParallaxAnimation(_global.saBgLay); 
         }
+      }); // end window scroll
 
-      });
+    }); // end document ready
 
-    });
   };
-
-
 
 
   /* 

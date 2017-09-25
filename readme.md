@@ -113,7 +113,7 @@ With this, you can define the position of parallaxing element. This is useful if
  and will be offset by the number specified. (If the second argument is not given, the element will start parallaxing from the very moment the page scrolls). If you want to make use of this awesome feature, but do not want to offset, simply set the second number to 0, like so:  `data-sabglayer="1.5, 0"`
 
 
-#### <a name="saParallaxMobile"></a>Mobile Control ####
+#### <a name="saParallaxMobile"></a>MOBILE CONTROL ####
 
 By default, parallax will not be enabled on screen sizes smaller than 768px. (Sidenote: This applies to initial screen-size: Whatever your page loaded with, determined whether or not parallax is enabled. This is by design so that check is not performed over and over).
 

@@ -77,23 +77,40 @@ The original scrollimate function. You **_have to_** call SA Parallax with the *
   `<script> scrollimate.init(['saParallax']); </script>`
 
 #### <a name="saParallaxAdvnaced"></a>ADVANCED SETUP:
-![SA PARALLAX SAMPLE](http://files.moritzzimmer.com/saparallax3.gif)
-
-See how in this example, the top hero-image parallaxes right away, but each following elements (images) only when it comes into view, and consistently for each element? SA Parallax can do that!
-
 *You can tell the `data-sabglayer` attribute how your parallax animation should behave.
 By Default, it will simply start at the top and will scroll at half the speed that the page once you start scrolling.
 The `data-sabglayer` will take two arguments:*
 
+#### Adjust scroll speed
+
 - Supply a single number like so: `data-sabglayer="0.5"`
 
-If you supply it a single number, this is the speed at which you want the element to scroll relative to the page speed. To create several layers of parallax, or simply to more fine-tune the effect, you can se the `data-sabglayer` attribute to any floating point value between 0 (which will cause the element to scroll normally) and 2 (which will cause the element to appear static on the page). You can also use any number larger than 2, which will cause the element to scroll in the opposite direction of the scroll! And yes, you can also use negative numbers and make the element scroll faster than the page!
+Supply it a single number, this is the speed at which you want the element to scroll relative to the page speed. To create several layers of parallax, or simply to more fine-tune the effect, you can se the `data-sabglayer` attribute to any floating point value between 0 (which will cause the element to scroll normally) and 2 (which will cause the element to appear static on the page). 
+
+You can also use any number larger than 2, which will cause the element to scroll in the opposite direction of the scroll. And yes, you can also use negative numbers and make the element scroll faster than the page!
+
+#### Centering / Offset Control 
+
+![SA PARALLAX SAMPLE](http://files.moritzzimmer.com/saparallax3.gif)
+
+*See how in this example, the top hero-image parallaxes right away, but each following elements (images) only when it comes into view, and consistently for each element? SA Parallax can do that!*
+
+
+You can supply more than one argument to SA Parallax. This is useful if the element you wish to parallax is not at the top. Supplying two elements will cause the eement to only _start_ parallaxing _once in view_. 
+
+**NEW in 1.3:**
+
+ - Supply two arguments (separated by comma), with the second argument set to *center* like so: `data-sabglayer="-0.5, center"`
+
+This will attempt to calculate parallax in such a way that will keep the item centered in the screen. Ideally, you would never see it parallax out of view in either direction.
+
+#### Offset Elements
   
-- Supply two argments seperated by comma like so: `data-sabglayer="-0.5, 0.36"`
+- Supply two arguments separated by comma like so: `data-sabglayer="-0.5, 0.36"`
 
 With this, you can define the position of parallaxing element. This is useful if you want the element to be positioned “perfectly” when it is scrolled in the center of the page, for example. `0,5` is usually a good start, buy you may need to play around with the number.
 
-*More importantly*, giving this attribute is useful if the element you wish to parallax is not at the top. The element will only _start_ parallaxing _once in view_, and will be offset by the number specified. (If the second argument is not given, the element will start parallaxing from the very moment the page scrolls).
+ and will be offset by the number specified. (If the second argument is not given, the element will start parallaxing from the very moment the page scrolls). If you want to make use of this awesome feature, but do not want to offset, simply set the second number to 0, like so:  `data-sabglayer="1.5, 0"`
 
 
 #### <a name="saParallaxMobile"></a>Mobile Control ####

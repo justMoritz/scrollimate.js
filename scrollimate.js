@@ -129,23 +129,24 @@ var scrollimate = (function( window, $ ){
         }
       }
 
-      if( topoffset < _global.wp+_global.saWinHi){
-        if ( $($saBgLayers[i]).attr("data-sabglayer") === "" )  {
-          $speed = 1;
-        }
-        else{
-          $speed = dataBgAttributes[0]; 
-        }
-
-        parallaxHelperConfig = {
-          saBg: $saBgLayers[i],
-          tOfSet:  topoffset,
-          winHi: _global.saWinHi,
-          spd: $speed,
-          elHeight: elHeight,
-          left: '0px' ,
-          flag: posFlag
-        };
+      if ( $($saBgLayers[i]).attr("data-sabglayer") === "" )  {
+        $speed = 1;
+      }
+      else{
+        $speed = dataBgAttributes[0]; 
+      }
+      parallaxHelperConfig = {
+        saBg: $saBgLayers[i],
+        tOfSet:  topoffset,
+        winHi: _global.saWinHi,
+        spd: $speed,
+        elHeight: elHeight,
+        left: '0px' ,
+        flag: posFlag
+      };
+      __saParallaxHelperFunction( parallaxHelperConfig );
+      // The code is run initially the first time above, and then again when it is within view, but offset by the elHeight.
+      if( topoffset+elHeight < _global.wp+_global.saWinHi){
 
         if ($($saBgLayers[i]).css("transform") === "translateX(-50%)"){
           parallaxHelperConfig.left = '-50%';

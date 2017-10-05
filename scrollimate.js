@@ -65,7 +65,6 @@ var scrollimate = (function( window, $ ){
    *    transformations have already occurred.
    */
   var __saParallaxHelperFunction = function(inputObject){
-
     var ___executeHelperFunction = function(){
       if(inputObject.flag === 0){
         inputObject.tOfSet = 0;
@@ -86,6 +85,7 @@ var scrollimate = (function( window, $ ){
       /* Resets all transformations that may have already happened before the window was resized below 768px */
       else{
         _global.saBgLay.css('transform', 'translate3d(0, 0, 0)');
+        _global.saBgLay.css('-ms-transform', 'translate(0, 0)');
       }
     }      
   };
@@ -110,10 +110,11 @@ var scrollimate = (function( window, $ ){
   var _saParallaxAnimation = function($saBgLayers){
     for (i = 0 ; i < $saBgLayers.length ; i++){
       var posFlag = 0,
-          topoffset = $($saBgLayers[i]).offset().top,
-          elHeight  = $($saBgLayers[i]).css('height');
+          topoffset  = $($saBgLayers[i]).offset().top,
+          elHeight   = $($saBgLayers[i]).css('height');
 
       elHeight = parseInt(elHeight, 10);
+      something = parseInt(elHeight, 10);
 
       var dataBgAttributes = $($saBgLayers[i]).attr('data-sabglayer').split(', ');
 
@@ -144,8 +145,8 @@ var scrollimate = (function( window, $ ){
         left: '0px' ,
         flag: posFlag
       };
-      __saParallaxHelperFunction( parallaxHelperConfig );
-      // The code is run initially the first time above, and then again when it is within view, but offset by the elHeight.
+
+      // The code is run when it is within view, but offset by the elHeight.
       if( topoffset+elHeight < _global.wp+_global.saWinHi){
 
         if ($($saBgLayers[i]).css("transform") === "translateX(-50%)"){
@@ -154,6 +155,20 @@ var scrollimate = (function( window, $ ){
         }
         else{
           __saParallaxHelperFunction( parallaxHelperConfig );
+        }
+      }
+      // run only the first time (on elements that are not static elements) 
+      // to make sure original position is approximating correct. 
+      // Hacky, and doesn't work 100%. Will re-write the logic sometime. 
+      // If you are not me and you are reading this, do a pull request :)
+      else if( dataBgAttributes.length > 1 ){
+        var m=0;
+        if(m === 0){
+          window.scrollBy(0,1);
+          parallaxHelperConfig.tOfSet = $($saBgLayers[i]).offset().top;
+          window.scrollBy(0,-1);
+          __saParallaxHelperFunction( parallaxHelperConfig );
+          m++;
         }
       }
     }
@@ -429,18 +444,18 @@ var scrollimate = (function( window, $ ){
 
 
   /** 
-    * Init Function 
-    * 
-    * On Document Ready, calculates the height of viewport (window Height)
-    *
-    * Parses the arguments-array given to the init method's call, loops through
-    * them and then executes the function with the corresponding name. 
-    * No error-checking is currently enabled, but this may be a future feature addition 
-    *
-    * On Window Resize, re-calculate the window height, and re-run parallax, if is enabled
-    * On window scroll, update the window position variable (_global.wp), and re-run parallax, if enabled
-    *
-    */
+   * Init Function 
+   * 
+   * On Document Ready, calculates the height of viewport (window Height)
+   *
+   * Parses the arguments-array given to the init method's call, loops through
+   * them and then executes the function with the corresponding name. 
+   * No error-checking is currently enabled, but this may be a future feature addition 
+   *
+   * On Window Resize, re-calculate the window height, and re-run parallax, if is enabled
+   * On window scroll, update the window position variable (_global.wp), and re-run parallax, if enabled
+   *
+   */
   var init = function(input){
     console.log('Running Scrollimate with the following input: ' + input );
 
@@ -473,7 +488,7 @@ var scrollimate = (function( window, $ ){
   };
 
 
-  /* 
+  /** 
    * Public Methods
    */
   return{

@@ -1,4 +1,4 @@
-/* moritzzimmer.com
+/* Scrollimate 1.3.4
  *
  * written by Moritz Zimmer, 2016 – 2017
  * http://www.moritzzimmer.com
@@ -109,13 +109,14 @@ var scrollimate = (function( window, $ ){
    */
   var _saParallaxAnimation = function($saBgLayers){
     for (i = 0 ; i < $saBgLayers.length ; i++){
-      var posFlag = 0,
-          topoffset = $($saBgLayers[i]).offset().top,
-          elHeight  = $($saBgLayers[i]).css('height');
+      var posFlag   = 0,
+          $curEl    = $($saBgLayers[i]),
+          topoffset = $curEl.offset().top,
+          elHeight  = $curEl.css('height');
 
       elHeight = parseInt(elHeight, 10);
 
-      var dataBgAttributes = $($saBgLayers[i]).attr('data-sabglayer').split(', ');
+      var dataBgAttributes = $curEl.attr('data-sabglayer').split(', ');
 
       if( dataBgAttributes.length > 1 ){
         posFlag = 1;
@@ -129,33 +130,30 @@ var scrollimate = (function( window, $ ){
         }
       }
 
-      if ( $($saBgLayers[i]).attr("data-sabglayer") === "" )  {
-        $speed = 1;
-      }
-      else{
-        $speed = dataBgAttributes[0]; 
-      }
-      parallaxHelperConfig = {
-        saBg: $saBgLayers[i],
-        tOfSet:  topoffset,
-        winHi: _global.saWinHi,
-        spd: $speed,
-        elHeight: elHeight,
-        left: '0px' ,
-        flag: posFlag
-      };
-      __saParallaxHelperFunction( parallaxHelperConfig );
-      // The code is run initially the first time above, and then again when it is within view, but offset by the elHeight.
-      if( topoffset+elHeight < _global.wp+_global.saWinHi){
-
-        if ($($saBgLayers[i]).css("transform") === "translateX(-50%)"){
-          parallaxHelperConfig.left = '-50%';
-          __saParallaxHelperFunction( parallaxHelperConfig );
+      // if( topoffset < _global.wp+_global.saWinHi){
+        if ( $curEl.attr("data-sabglayer") === "" )  {
+          $speed = 1;
         }
         else{
-          __saParallaxHelperFunction( parallaxHelperConfig );
+          $speed = dataBgAttributes[0]; 
         }
-      }
+
+        parallaxHelperConfig = {
+          saBg: $saBgLayers[i],
+          tOfSet:  topoffset,
+          winHi: _global.saWinHi,
+          spd: $speed,
+          elHeight: elHeight,
+          left: '0px' ,
+          flag: posFlag
+        };
+
+        if ($curEl.css("transform") === "translateX(-50%)"){
+          parallaxHelperConfig.left = '-50%';
+        }
+
+        __saParallaxHelperFunction( parallaxHelperConfig );
+      // }
     }
   };
 

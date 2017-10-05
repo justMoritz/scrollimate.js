@@ -1,0 +1,23 @@
+{
+  "name": "scrollimate",
+  "version": "1.3.4",
+  "description": "Scrollimate focuses on features and functions related to scrolling, animations (hence the name), but includes also other functionalities.",
+  "main": "scrollimate.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justMoritz/scrollimate.git"
+  },
+  "keywords": [
+    "scrollimate.js",
+    "scrollimate"
+  ],
+  "author": "Moritz Zimmer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/justMoritz/scrollimate/issues"
+  },
+  "homepage": "https://github.com/justMoritz/scrollimate#readme"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "scrollimate",
+  "main": "scrollimate.js",
+  "homepage": "https://github.com/justMoritz/scrollimate",
+  "authors": [
+    "Moritz Zimmer <moritz@zimmermail.net>"
+  ],
+  "description": "Scrollimate focuses on features and functions related to scrolling, animations (hence the name), but includes also other functionalities.",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

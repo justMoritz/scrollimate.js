@@ -110,13 +110,14 @@ var scrollimate = (function( window, $ ){
   var _saParallaxAnimation = function($saBgLayers){
     for (i = 0 ; i < $saBgLayers.length ; i++){
       var posFlag = 0,
-          topoffset  = $($saBgLayers[i]).offset().top,
-          elHeight   = $($saBgLayers[i]).css('height');
+          $saCurEl = $($saBgLayers[i]);
+          topoffset  = $saCurEl.offset().top,
+          elHeight   = $saCurEl.css('height');
 
       elHeight = parseInt(elHeight, 10);
       something = parseInt(elHeight, 10);
 
-      var dataBgAttributes = $($saBgLayers[i]).attr('data-sabglayer').split(', ');
+      var dataBgAttributes = $saCurEl.attr('data-sabglayer').split(', ');
 
       if( dataBgAttributes.length > 1 ){
         posFlag = 1;
@@ -149,7 +150,7 @@ var scrollimate = (function( window, $ ){
       // The code is run when it is within view, but offset by the elHeight.
       if( topoffset+elHeight < _global.wp+_global.saWinHi){
 
-        if ($($saBgLayers[i]).css("transform") === "translateX(-50%)"){
+        if ($saCurEl.css("transform") === "translateX(-50%)"){
           parallaxHelperConfig.left = '-50%';
           __saParallaxHelperFunction( parallaxHelperConfig );
         }
@@ -161,11 +162,11 @@ var scrollimate = (function( window, $ ){
       // to make sure original position is approximating correct. 
       // Hacky, and doesn't work 100%. Will re-write the logic sometime. 
       // If you are not me and you are reading this, do a pull request :)
-      else if( dataBgAttributes.length > 1 ){
+      else {
         var m=0;
         if(m === 0){
           window.scrollBy(0,1);
-          parallaxHelperConfig.tOfSet = $($saBgLayers[i]).offset().top;
+          parallaxHelperConfig.tOfSet = $saCurEl.offset().top;
           window.scrollBy(0,-1);
           __saParallaxHelperFunction( parallaxHelperConfig );
           m++;

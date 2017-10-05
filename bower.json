@@ -6,6 +6,11 @@
     "Moritz Zimmer <moritz@zimmermail.net>"
   ],
   "description": "Scrollimate focuses on features and functions related to scrolling, animations (hence the name), but includes also other functionalities.",
+  "keywords": [
+    "scrollimate",
+    "scrollimate.js",
+    "jquery"
+  ],
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -13,5 +18,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+      "jquery": ">=1.0"
+  }
 }

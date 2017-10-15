@@ -19,7 +19,8 @@ Scrollimate focuses on features and functions related to scrolling, animations (
      - [SA Tabs](#saTabs)
          - [Markup](#saTabsMarkup)
          - [Setup](#saTabsSetup)
-         - [Exclusion](#saTabsExclusion)
+         - [Advanced Setup](#saTabsAdvSetup)
+         - [Exclude Links](#saTabsExclusion)
      - [SA Scroll Class](#saScrollclass)
          - [Baisc Setup](#saScrollclassBasic)
      - [SA Accordion](#saAccordion)
@@ -213,9 +214,24 @@ Note: (The class for the active tab on the navigation is `.tabscroll_activeNavi`
 
 1. Follow the Instructions for Scrollimate Installation
 2. Call the Method once on the page:
-  `<script> scrollimate.saTabs; </script>` (You may also use the init function by supplying 'saScroll' as an additional argument)
+  `<script> scrollimate.saTabs; </script>` (You may also use the init function by supplying 'saTabs' as an additional argument)
 
-### <a name="saTabsExclusion"></a>EXCLUSION
+### <a name="saTabsAdvSetup"></a>ADVANCED SETUP:
+
+#### Transitions
+
+You can control the type of transition between tabs with the `data-tabscrollnavcontainer` attribute. You can set it to:
+- `fade`
+- `slide`
+- or leave blank for no transition at all
+
+#### Non-Index Version
+
+You may not want your tabs to be indexed / indexable. Tabscroll keeps track of your tabs via the URL, by adding a fragment (“hash”) to the end of the URL. **But what if you have an application on your page that already does that?**
+
+Now Tabscroll can accomodate, by simply calling the `saTabs.nonID();` method some time *after* you included tabscroll.js. This will not index your tabs, not write to the URL, but still keep the same markup and functionality for your tabs.
+
+### <a name="saTabsExclusion"></a>EXCLUDE LINKS
 
 You want to have a link within your navigation that does something else. An external link, a popup link, etc. This is possible by simply adding the `data-saexclude` attribute to the anchor element.
 

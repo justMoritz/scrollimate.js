@@ -227,9 +227,9 @@ You can control the type of transition between tabs with the `data-tabscrollnavc
 
 #### Non-Index Version
 
-You may not want your tabs to be indexed / indexable. Tabscroll keeps track of your tabs via the URL, by adding a fragment (“hash”) to the end of the URL. **But what if you have an application on your page that already does that?**
+You may not want your tabs to be indexed / indexable. SA Tabs keeps track of your tabs via the URL, by adding a fragment (“hash”) to the end of the URL. **But what if you have an application on your page that already does that?**
 
-Now Tabscroll can accomodate, by simply calling the `saTabs.nonID();` method some time *after* you included tabscroll.js. This will not index your tabs, not write to the URL, but still keep the same markup and functionality for your tabs.
+Now SA Tabs can accomodate, by simply calling the `nonIDTabs();` method some time *after* the initial setup. (You can it as an additional argument to the `init` method, *after* the `saTabs` Method) This will not index your tabs, not write to the URL, but still keep the same markup and functionality for your tabs.
 
 ### <a name="saTabsExclusion"></a>EXCLUDE LINKS
 

@@ -100,17 +100,19 @@ You can supply more than one argument to SA Parallax. This is useful if the elem
 
 **NEW in 1.3:**
 
+#### Keep Elements Centered
+
  - Supply two arguments (separated by comma), with the second argument set to *center* like so: `data-sabglayer="-0.5, center"`
 
-This will calculate the parallax so that the element will be in it's “ideal” position when centered vertically on the screen. Ideally, you would never see it parallax out of view in either direction. (Milage may vary...)
+This will calculate the parallax so that the element will be in it's “ideal” position when centered vertically on the screen. Plus, (ideally) you would never see it parallax out of view in either direction. (Mileage may vary...)
 
-#### Offset Elements
+#### Custom Offset Elements
   
 - Supply a second argument separated by comma like so: `data-sabglayer="-0.5, 0.25"`
 
 With this, you can define the position of parallaxing element. This is useful if you want the fine-control the element’s be position. This number is the fraction it is offset by it’s own hight. For example, `0.5` on a 500px tall element will cause it to be offset by 250px, `1` by 500px, etc.
 
- and will be offset by the number specified. (If the second argument is not given, the element will start parallaxing from the very moment the page scrolls). If you want to make use of this awesome feature, but do not want to offset, simply set the second number to 0, like so:  `data-sabglayer="1.5, 0"`
+If you don't want the element to be offset, but not start parallaxing until in view, simply set the second number to 0, like so:  `data-sabglayer="1.5, 0"`
 
 
 #### <a name="saParallaxMobile"></a>MOBILE CONTROL ####

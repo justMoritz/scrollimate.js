@@ -426,6 +426,28 @@ var scrollimate = (function( window, $ ){
   };
 
 
+  /**
+  * saUnderline
+  *
+  * @ Targets either all <a> anchor tags, 
+  * @ or and FULL jQuery selector 
+  *
+  * wraps each word in a link tag in a span with class of underline,
+  * for the purpose of better stying underlines via pseudo classes
+  */
+  var saUnderline = function($target){
+    $target = $target || $('a');                   
+    var $allLinks = $target;
+    for(i=0; i<$allLinks.length; i++){
+      var cur   = $allLinks[i],
+          words = $(cur).text().split(" ");
+      $(cur).empty();
+      $.each(words, function(i, v) {
+        $(cur).append($("<span class='underline'>").text(v+' '));
+      });
+    }              
+  };
+
   /** 
     * Init Function 
     * 
@@ -475,11 +497,12 @@ var scrollimate = (function( window, $ ){
    * Public Methods
    */
   return{
+    saAccordion: saAccordion,
     saParallax: saParallax,
     saScroll: saScroll,
-    saTabs: saTabs,
     saScrollClass: saScrollClass,
-    saAccordion: saAccordion,
+    saTabs: saTabs,
+    saUnderline: saUnderline,
     init: init,
     enableMobile: enableMobile,
   };

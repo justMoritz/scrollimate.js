@@ -503,7 +503,7 @@ var scrollimate = (function( window, $ ){
   * The listens to the desired interaction and appends the div to inside that element, based on the 
   * mouse cursor position. 
   * If noclass is set to true, the target element will not inherit the basic styles required to make
-  * ripple effect work. (inlineblock, overflow: hidden, position relative)
+  * ripple effect work. (display: inline-block, overflow: hidden, position relative)
   */
   var saRipple = function($input){
     

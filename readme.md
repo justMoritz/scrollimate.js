@@ -361,12 +361,15 @@ You can also target just a specifc element by passing a `target` of the complete
 
 You can also cause the ripple effect on mouseover, etc. by passing an `interaction` argument like so: `scrollimate.saRipple({interaction: 'mouseover' });`
 
+You can also set `noclass` to `true`, in which case the target element will not inherit the basic styles required to make ripple effect work. (display: inline-block, overflow: hidden, position relative). Remember to apply them manually!
+
 Finally, you can combile all the arments and may end up with something like this:
 
     scrollimate.saRipple({
       color: 'rgba(0,255,0,0.05)',
       interaction: 'mouseover',
-      target: $('.mouseclass')
+      target: $('.mouseclass'),
+      noclass: true
     });
 
 *note:* You can currently _not_ call this advanced setup via this init() method. 

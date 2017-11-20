@@ -595,6 +595,7 @@ var scrollimate = (function( window, $ ){
   return{
     saAccordion: saAccordion,
     saParallax: saParallax,
+    saRipple: saRipple,
     saScroll: saScroll,
     saScrollClass: saScrollClass,
     saTabs: saTabs,

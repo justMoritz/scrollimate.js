@@ -1,7 +1,5 @@
 # Scrollimate!
 
-Finally, the first version of scrollimate after years of having only indivdual components available!
-
 Scrollimate focuses on features and functions related to scrolling, animations (hence the name), but includes also other functionalities.
 
 ## Table of Contents

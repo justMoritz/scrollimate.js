@@ -436,7 +436,7 @@ var scrollimate = (function( window, $ ){
       $element.on(type, function(){
         // desktop functionality
         if ( $(window).width() > 767) {   
-          console.log(restwidth);
+          // console.log(restwidth);
           $element.css('width', restwidth+'%').removeClass('active');
           $(this).css('width', mainwidthinpercent+'%').addClass('active'); 
         } 

@@ -491,7 +491,7 @@ var scrollimate = (function( window, $ ){
   * @ (optional) target. By default it will be all elements with the class .ripple
   * @ (optional) color: CSS value. See below
   * @ (optional) interaction: See below
-  * @ (optional) noclass: true/false
+  * @ (optional) noclass: true/FALSE
   *
   * You can set the ripple color in 3 ways: 
   *   - use default: White. Nothin is needed other than the call the function one time on the page

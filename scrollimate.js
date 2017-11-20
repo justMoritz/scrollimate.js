@@ -254,7 +254,7 @@ var scrollimate = (function( window, $ ){
         $curEl.removeAttr("href").css('cursor', 'pointer');
         $curEl.on('click', function(){
           var tab_target = $(this).parent().attr("data-tabscrollnavi");
-          console.log( tab_target );
+          // console.log( tab_target );
           _saTabsHashChangeFunct(tab_target);
         });
       }

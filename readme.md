@@ -244,7 +244,11 @@ You want to have a link within your navigation that does something else. An exte
 
 ### <a name="saTabsExclusion"></a>Non-Indexed Version
 
-Tabscroll an also be used in a “non-indexed version” that does not keep track of its state via the URL but instead uses click events to change tabs. Useful if your page already tracks another application state via the URL. In order to achieve this, DOCUMENTATION COMING SOON 
+You may not want your tabs to be indexed / indexable. Tabscroll keeps track of your tabs via the URL, by adding a fragment (“hash”) to the end of the URL. But what if you have an application on your page that already does that?
+
+Now Tabscroll can accomodate, by simply calling the saTabs.nonID(); method some time after you included tabscroll.js. This will not index your tabs, not write to the URL, but still keep the same markup and functionality for your tabs.
+
+
 
 ---
 ---

@@ -21,6 +21,7 @@ Scrollimate focuses on features and functions related to scrolling, animations (
          - [Setup](#saTabsSetup)
          - [Advanced Setup](#saTabsAdvSetup)
          - [Exclude Links](#saTabsExclusion)
+         - [Non-indexed Version](#saTabsNonindexed)
      - [SA Scroll Class](#saScrollclass)
          - [Baisc Setup](#saScrollclassBasic)
      - [SA Accordion](#saAccordion)
@@ -234,6 +235,10 @@ Now SA Tabs can accomodate, by simply calling the `nonIDTabs();` method some tim
 ### <a name="saTabsExclusion"></a>EXCLUDE LINKS
 
 You want to have a link within your navigation that does something else. An external link, a popup link, etc. This is possible by simply adding the `data-saexclude` attribute to the anchor element.
+
+### <a name="saTabsExclusion"></a>Non-Indexed Version
+
+Tabscroll an also be used in a “non-indexed version” that does not keep track of its state via the URL but instead uses click events to change tabs. Useful if your page already tracks another application state via the URL. In order to achieve this, DOCUMENTATION COMING SOON 
 
 ---
 ---

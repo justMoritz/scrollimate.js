@@ -489,8 +489,9 @@ var scrollimate = (function( window, $ ){
   * Add a material-design-like ripple effect that activates on click.
   *
   * @ (optional) target. By default it will be all elements with the class .ripple
-  * @ (optional) color: See below
+  * @ (optional) color: CSS value. See below
   * @ (optional) interaction: See below
+  * @ (optional) noclass: true/false
   *
   * You can set the ripple color in 3 ways: 
   *   - use default: White. Nothin is needed other than the call the function one time on the page
@@ -501,6 +502,8 @@ var scrollimate = (function( window, $ ){
   * Parses input arguments, adds styles to head of page, adds ripplestyles base-class to all targets
   * The listens to the desired interaction and appends the div to inside that element, based on the 
   * mouse cursor position. 
+  * If noclass is set to true, the target element will not inherit the basic styles required to make
+  * ripple effect work. (inlineblock, overflow: hidden, position relative)
   */
   var saRipple = function($input){
     
@@ -508,15 +511,19 @@ var scrollimate = (function( window, $ ){
       $target = $input.target || $('.ripple');
       var fallbackcolor = $input.color || '#ffffff';
       var inttype = $input.interaction || 'click';
+      var noclass = $input.noclass || false;
     }else{
       $target = $('.ripple');
       var fallbackcolor = '#ffffff';
       var inttype = 'click';
+      var noclass = false;
     }
     
     $('<style>.ripplestyles{display: inline-block;overflow:hidden;position: relative;}.ripple-effect{animation: ripple-animation 2s;background: white;border-radius: 50%;height: 50px;position: absolute;width: 50px;}@keyframes ripple-animation {from {transform: scale(1);opacity: 0.4;}to {transform: scale(100);opacity: 0;}}</style>').appendTo($('head'));
     
-    $target.addClass('ripplestyles');
+    if(!noclass){
+      $target.addClass('ripplestyles');
+    }
 
     $target.on(inttype, function (event) {
 

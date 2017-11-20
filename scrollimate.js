@@ -461,14 +461,14 @@ var scrollimate = (function( window, $ ){
 
 
   /**
-  * saUnderline
-  *
-  * @ Targets either all <a> anchor tags, 
-  * @ or and FULL jQuery selector 
-  *
-  * wraps each word in a link tag in a span with class of underline,
-  * for the purpose of better stying underlines via pseudo classes
-  */
+   * saUnderline
+   *
+   * @ Targets either all <a> anchor tags, 
+   * @ or and FULL jQuery selector 
+   *
+   * wraps each word in a link tag in a span with class of underline,
+   * for the purpose of better stying underlines via pseudo classes
+   */
   var saUnderline = function($target){
     $target = $target || $('a');                   
     var $allLinks = $target;
@@ -481,6 +481,68 @@ var scrollimate = (function( window, $ ){
       });
     }              
   };
+
+
+ /**
+  * saRipple
+  *
+  * Add a material-design-like ripple effect that activates on click.
+  *
+  * @ (optional) target. By default it will be all elements with the class .ripple
+  * @ (optional) color: See below
+  * @ (optional) interaction: See below
+  *
+  * You can set the ripple color in 3 ways: 
+  *   - use default: White. Nothin is needed other than the call the function one time on the page
+  *   - When initializing saRipple, you can set the color by passing it as an argument.
+  *   - add the data-ripple attribute the dom element, and put the complete CSS color therein
+  *
+  * Notes:
+  * Parses input arguments, adds styles to head of page, adds ripplestyles base-class to all targets
+  * The listens to the desired interaction and appends the div to inside that element, based on the 
+  * mouse cursor position. 
+  */
+  var saRipple = function($input){
+    
+    if(typeof $input !== 'undefined'){
+      $target = $input.target || $('.ripple');
+      var fallbackcolor = $input.color || '#ffffff';
+      var inttype = $input.interaction || 'click';
+    }else{
+      $target = $('.ripple');
+      var fallbackcolor = '#ffffff';
+      var inttype = 'click';
+    }
+    
+    $('<style>.ripplestyles{display: inline-block;overflow:hidden;position: relative;}.ripple-effect{animation: ripple-animation 2s;background: white;border-radius: 50%;height: 50px;position: absolute;width: 50px;}@keyframes ripple-animation {from {transform: scale(1);opacity: 0.4;}to {transform: scale(100);opacity: 0;}}</style>').appendTo($('head'));
+    
+    $target.addClass('ripplestyles');
+
+    $target.on(inttype, function (event) {
+
+      var $div = $('<div/>'),
+          btnOffset = $(this).offset(),
+          xPos = event.pageX - btnOffset.left,
+          yPos = event.pageY - btnOffset.top;
+
+      $div.addClass('ripple-effect');
+      var $ripple = $(".ripple-effect");
+
+      $ripple.css("height", $(this).height());
+      $ripple.css("width", $(this).height());
+      var color = $(this).data("ripplecolor") || fallbackcolor;
+      $div.css({
+          top: yPos - ($ripple.height()/2),
+          left: xPos - ($ripple.width()/2),
+          background: color
+        }).appendTo($(this));
+
+      window.setTimeout(function(){
+        $div.remove();
+      }, 1500);
+    });
+  };
+
 
   /** 
     * Init Function 

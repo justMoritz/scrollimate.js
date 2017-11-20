@@ -27,6 +27,12 @@ Scrollimate focuses on features and functions related to scrolling, animations (
      - [SA Accordion](#saAccordion)
          - [Basic Setup](#saAccordionBasic)
          - [Advanced](#saAccordionAdvanced)
+     - [SA Underline](#saUnderline)
+         - [Basic Setup](#saUnderlineBasic)
+         - [Advanced](#saUnderlineAdvanced)
+     - [SA Ripple](#saRipple)
+         - [Basic Setup](#saRippleBasic)
+         - [Advanced](#saUnderlineRipple)
 
 ## <a name="setup"></a>Setup and Usage: 
 
@@ -276,7 +282,7 @@ _as of right now, this method_  **_cannot_** **_be_** **_called_** **_with_** **
 
 1. You will need any number elements with the same selector, for example 5 divs with the class of `element`. _please float these elements left, inline or inline-block the, so they will be next to each other_ . Clearing the float etc. will be up to you.
 2. Follow the Instructions for Scrollimate Installation
-3. Call the Method once on the page with _two arguments_ like so: `<script> saAccordion('.element', '66.66'); </script>` 
+3. Call the Method once on the page with _two arguments_ like so: `<script> scrollimate.saAccordion('.element', '66.66'); </script>` 
 
 #### <a name="saAccordionAdvanced"></a>Advanced SETUP:
 
@@ -288,4 +294,83 @@ SA Accordion takes **at** **least** **one**, but can take four arguments:
 4. (optional) You can determin the height of the element, in pixels, or in percent of the width of the individual element. (This is done via padding-bottom)
 
 Please note that SA Accordion works with float: left;, and will take up 100% of the width of its container, so please plan your markup accordingly. 
+
+
+---
+---
+
+# <a name="saUnderline"></a>SA Underline
+(DEMO: https://codepen.io/justMoritz/pen/veMmbE)
+
+If you like the idea of having a link underlined, because it makes them easily identifyable as a to read as a link; but you find that it makes them hard to imposisble to style, this method is for you.
+
+This method will wrap each word inside a link (anchor tag) in it's own span, which you can then style (or style it's pseudo element). See the Demo link for some examples.
+
+_for full functianlity (aka, with arguments), this method can current_ **_not_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
+
+#### <a name="saUnderlineBasic"></a>BASIC SETUP:
+
+The following will target all links:
+
+1. Follow the Instructions for Scrollimate Installation
+2. Call the Method once on the page with _two arguments_ like so: `<script> scrollimate.saUnderline(); </script>` 
+3. Apply the styles you want to `a span:before` (or something simliar).
+
+*note:* You _can_ call this basic setup via this init() method. 
+
+#### <a name="saUnderlineAdvanced"></a>Advanced SETUP:
+
+If you pass a parameter, it will target 
+
+1 Same as above, but ...
+2. ...call with `scrollimate.saUnderline( $('your-selector-here') );`
+
+*note:* You can currently _not_ call this advanced setup via this init() method. 
+
+---
+---
+
+# <a name="saRipple"></a>SA Ripple
+(DEMO: https://codepen.io/justMoritz/pen/qVxPBZ)
+
+Add a material-design-like ripple effect that activates on click.
+
+
+_for full functianlity (aka, with arguments), this method can current_ **_not_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
+
+#### <a name="saRippleBasic"></a>BASIC SETUP:
+
+The following will target all links:
+=
+1. Follow the Instructions for Scrollimate Installation
+2. Give the elements you want to have the ripple-effect a class of `.ripple`.
+3. Call the Method once on the page with _two arguments_ like so: `<script> scrollimate.saRipple(); </script>` 
+
+*note:* You _can_ call this basic setup via this init() method. 
+
+#### <a name="saRippleAdvanced"></a>Advanced SETUP:
+
+You can set the ripple color in 3 ways: 
+  - use default: White. Nothin is needed other than the call the function one time on the page
+  - When initializing saRipple, you can set the color by passing it as an argument, like so `scrollimate.saRipple({color: #ff4400});`
+  - add the `data-ripplecolor` attribute the dom element, and put the complete CSS color therein
+
+You can also target just a specifc element by passing a `target` of the complete jQuery selector like so: `scrollimate.saRipple({target: $(your-selector-here) });`
+
+You can also cause the ripple effect on mouseover, etc. by passing an `interaction` argument like so: `scrollimate.saRipple({interaction: 'mouseover' });`
+
+Finally, you can combile all the arments and may end up with something like this:
+
+    scrollimate.saRipple({
+      color: 'rgba(0,255,0,0.05)',
+      interaction: 'mouseover',
+      target: $('.mouseclass')
+    });
+
+*note:* You can currently _not_ call this advanced setup via this init() method. 
+
+
+
+
+
 

@@ -518,36 +518,57 @@ var scrollimate = (function( window, $ ){
       var inttype = 'click';
       var noclass = false;
     }
-    
-    $('<style>.ripplestyles{display: inline-block;overflow:hidden;position: relative;}.ripple-effect{animation: ripple-animation 2s;-webkit-animation: ripple-animation 2s;-ms-animation: ripple-animation 2s;-o-animation: ripple-animation 2s;-moz-animation: ripple-animation 2s;background: white;border-radius: 50%;height: 50px;position: absolute;width: 50px;}@keyframes ripple-animation {from {transform: scale(1);-webkit-transform: scale(1);-ms-transform: scale(1);-o-transform: scale(1);-moz-transform: scale(1);opacity: 0.4;}to {transform: scale(100);-webkit-transform: scale(100);-ms-transform: scale(100);-o-transform: scale(100);-moz-transform: scale(100);opacity: 0;}}-webkit-@keyframes ripple-animation {from {transform: scale(1);-webkit-transform: scale(1);-ms-transform: scale(1);-o-transform: scale(1);-moz-transform: scale(1);opacity: 0.4;}to {transform: scale(100);-webkit-transform: scale(100);-ms-transform: scale(100);-o-transform: scale(100);-moz-transform: scale(100);opacity: 0;}}-ms-@keyframes ripple-animation {from {transform: scale(1);-webkit-transform: scale(1);-ms-transform: scale(1);-o-transform: scale(1);-moz-transform: scale(1);opacity: 0.4;}to {transform: scale(100);-webkit-transform: scale(100);-ms-transform: scale(100);-o-transform: scale(100);-moz-transform: scale(100);opacity: 0;}}-o-@keyframes ripple-animation {from {transform: scale(1);-webkit-transform: scale(1);-ms-transform: scale(1);-o-transform: scale(1);-moz-transform: scale(1);opacity: 0.4;}to {transform: scale(100);-webkit-transform: scale(100);-ms-transform: scale(100);-o-transform: scale(100);-moz-transform: scale(100);opacity: 0;}}-moz-@keyframes ripple-animation {from {transform: scale(1);-webkit-transform: scale(1);-ms-transform: scale(1);-o-transform: scale(1);-moz-transform: scale(1);opacity: 0.4;}to {transform: scale(100);-webkit-transform: scale(100);-ms-transform: scale(100);-o-transform: scale(100);-moz-transform: scale(100);opacity: 0;}}</style><!--[if IE 9]><style>.ripple-effect{display:none;}</style><![endif]-->').appendTo($('head'));
+
+    $('<style>.ripplestyles{display: inline-block;overflow:hidden;position: relative;}.ripple-effect{pointer-events: none;animation: ripple-animation 2s;-webkit-animation: ripple-animation 2s;-ms-animation: ripple-animation 2s;-o-animation: ripple-animation 2s;-moz-animation: ripple-animation 2s;background: white;border-radius: 50%;height: 50px;position: absolute;width: 50px;}@keyframes ripple-animation {from {transform: scale(1);-webkit-transform: scale(1);-ms-transform: scale(1);-o-transform: scale(1);-moz-transform: scale(1);opacity: 0.4;}to {transform: scale(100);-webkit-transform: scale(100);-ms-transform: scale(100);-o-transform: scale(100);-moz-transform: scale(100);opacity: 0;}}-webkit-@keyframes ripple-animation {from {transform: scale(1);-webkit-transform: scale(1);-ms-transform: scale(1);-o-transform: scale(1);-moz-transform: scale(1);opacity: 0.4;}to {transform: scale(100);-webkit-transform: scale(100);-ms-transform: scale(100);-o-transform: scale(100);-moz-transform: scale(100);opacity: 0;}}-ms-@keyframes ripple-animation {from {transform: scale(1);-webkit-transform: scale(1);-ms-transform: scale(1);-o-transform: scale(1);-moz-transform: scale(1);opacity: 0.4;}to {transform: scale(100);-webkit-transform: scale(100);-ms-transform: scale(100);-o-transform: scale(100);-moz-transform: scale(100);opacity: 0;}}-o-@keyframes ripple-animation {from {transform: scale(1);-webkit-transform: scale(1);-ms-transform: scale(1);-o-transform: scale(1);-moz-transform: scale(1);opacity: 0.4;}to {transform: scale(100);-webkit-transform: scale(100);-ms-transform: scale(100);-o-transform: scale(100);-moz-transform: scale(100);opacity: 0;}}-moz-@keyframes ripple-animation {from {transform: scale(1);-webkit-transform: scale(1);-ms-transform: scale(1);-o-transform: scale(1);-moz-transform: scale(1);opacity: 0.4;}to {transform: scale(100);-webkit-transform: scale(100);-ms-transform: scale(100);-o-transform: scale(100);-moz-transform: scale(100);opacity: 0;}}</style><!--[if IE 9]><style>.ripple-effect{display:none;}</style><![endif]-->').appendTo($('head'));
     
     if(!noclass){
       $target.addClass('ripplestyles');
+    }  
+
+    var _execute = function(event, passedthis){
+        var $div = $('<div/>'),
+            btnOffset = $(passedthis).offset(),
+            xPos = event.pageX - btnOffset.left,
+            yPos = event.pageY - btnOffset.top;
+
+        $div.addClass('ripple-effect');
+        var $ripple = $(".ripple-effect");
+
+        $ripple.css("height", $(passedthis).height());
+        $ripple.css("width", $(passedthis).height());
+        var color = $(passedthis).data("ripplecolor") || fallbackcolor;
+        $div.css({
+            top: yPos - ($ripple.height()/2),
+            left: xPos - ($ripple.width()/2),
+            background: color
+          }).appendTo($(passedthis));
+
+        window.setTimeout(function(){
+          $div.remove();
+        }, 1500);
+      }
+      
+    var reseter = false;
+    if(inttype === 'mouseover'){
+      $target.on(inttype, function (event) {    
+        if(reseter === true){
+          _execute(event, this);
+          reseter = false;
+        }
+      });
+      
+      $target.on('mouseout', function(){
+        reseter = true;
+      });
+    }
+    else{
+      $target.on(inttype, function (event) {      
+        _execute(event, this);
+      });
     }
 
-    $target.on(inttype, function (event) {
-
-      var $div = $('<div/>'),
-          btnOffset = $(this).offset(),
-          xPos = event.pageX - btnOffset.left,
-          yPos = event.pageY - btnOffset.top;
-
-      $div.addClass('ripple-effect');
-      var $ripple = $(".ripple-effect");
-
-      $ripple.css("height", $(this).height());
-      $ripple.css("width", $(this).height());
-      var color = $(this).data("ripplecolor") || fallbackcolor;
-      $div.css({
-          top: yPos - ($ripple.height()/2),
-          left: xPos - ($ripple.width()/2),
-          background: color
-        }).appendTo($(this));
-
-      window.setTimeout(function(){
-        $div.remove();
-      }, 1500);
-    });
+      
+    
   };
 
 

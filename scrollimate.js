@@ -550,7 +550,6 @@ var scrollimate = (function( window, $ ){
       
     var reseter = false;
     if(inttype === 'mouseover'){
-     
       $target.on(inttype, function (event) {    
         if(reseter === true){
           _execute(event, this);

@@ -10,7 +10,7 @@ Scrollimate focuses on features and functions related to scrolling, animations (
 - [The Methods](#methods)
      - [SA Parallax](#saParallax)
          - [Basic Setup](#saParallaxBasic)
-         - [Advnaced Setup](#saParallaxAdvanced)
+         - [Advanced Setup](#saParallaxAdvanced)
          - [Mobile Control](#saParallaxAdvanced)
      - [SA (Smooth Anchor) Scroll](#saScroll)
          - [Basic Setup](#saScrollBasic)
@@ -82,7 +82,7 @@ The original scrollimate function. You **_have to_** call SA Parallax with the *
 3. Call the init Function with:
   `<script> scrollimate.init(['saParallax']); </script>`
 
-#### <a name="saParallaxAdvnaced"></a>ADVANCED SETUP:
+#### <a name="saParallaxAdvanced"></a>ADVANCED SETUP:
 *You can tell the `data-sabglayer` attribute how your parallax animation should behave.
 By Default, it will simply start at the top and will scroll at half the speed that the page once you start scrolling.
 The `data-sabglayer` will take two arguments:*

@@ -201,7 +201,7 @@ var scrollimate = (function( window, $ ){
     console.log('saScroll initiated');
     $('[href^="#"]').click(function(){
       var $this = $(this);
-      if( $($this.attr('href')).length ){
+      if( $($this.attr('href')).length && $this.attr('href') !== '#' ){
         var smoothAnchorScrollTime = 500 + (Math.floor($($this.attr("href")).offset().top))/2;
         var scrollEvents = "scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove";
         var $page = $('html, body');

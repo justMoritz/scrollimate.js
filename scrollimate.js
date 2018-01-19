@@ -199,13 +199,24 @@ var scrollimate = (function( window, $ ){
    */
   var saScroll = function() {
     console.log('saScroll initiated');
-      $('[href^="#"]').click(function(){
-        var smoothAnchorScrollTime = 500 + (Math.floor($($(this).attr("href")).offset().top))/2;
-        $('html, body').animate({
-            scrollTop: $( $(this).attr('href') ).offset().top
-        }, smoothAnchorScrollTime);
+    $('[href^="#"]').click(function(){
+      var $this = $(this);
+      if( $($this.attr('href')).length && $this.attr('href') !== '#' ){
+        var smoothAnchorScrollTime = 500 + (Math.floor($($this.attr("href")).offset().top))/2;
+        var scrollEvents = "scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove";
+        var $page = $('html, body');
+
+        $page.on(scrollEvents, function(){
+          $page.stop();
+        });
+        $page.animate({
+          scrollTop: $( $this.attr('href') ).offset().top
+        }, smoothAnchorScrollTime).promise().then(function() {
+          $page.off(scrollEvents);
+        });
         return false;
-      });  
+      }
+    });  
   };
 
 

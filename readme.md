@@ -14,6 +14,7 @@ Scrollimate focuses on features and functions related to scrolling, animations (
          - [Mobile Control](#saParallaxAdvanced)
      - [SA (Smooth Anchor) Scroll](#saScroll)
          - [Basic Setup](#saScrollBasic)
+         - [Advanced Setup](#saScrollAdvanced)
      - [SA Tabs](#saTabs)
          - [Markup](#saTabsMarkup)
          - [Setup](#saTabsSetup)
@@ -141,6 +142,18 @@ Smoothly scrolls to elements on websites that contain anchor scrolls. Instead of
 
 1. Follow the Instructions for Scrollimate Installation
 2. Call the Method once on the page: `<script> scrollimate.saScroll; </script>` (You may also use the init function by supplying 'saScroll' as an additional argument)
+
+#### <a name="saScrollBasic"></a>ADVANCED SETUP:
+
+The above method cancels any scroll on user-input, in order to preserve and respect the user's scroll before the automatic scroll.
+Alternatively, you can *force* the scroll by calling the method with a force argument like so:
+
+`scrollimate.saScroll('force')`
+
+As with any method called with arguments, you can currently NOT call this functionality via the init method.
+
+_
+
 
 ---
 ---

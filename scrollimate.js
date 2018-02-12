@@ -1,9 +1,9 @@
 /* Scrollimate 1.3.4
  *
- * written by Moritz Zimmer, 2016 – 2017
+ * written by Moritz Zimmer, 2016 – 2018
  * http://www.moritzzimmer.com
  *
- * (c) 2017 CC Attribution 4.0
+ * (c) 2018 CC Attribution 4.0
  * https://creativecommons.org/licenses/by/4.0/legalcode
  *
  */
@@ -197,13 +197,17 @@ var scrollimate = (function( window, $ ){
    * the href attribute. 
    * return false to prevent default
    */
-  var saScroll = function() {
+  var saScroll = function(force) {
     console.log('saScroll initiated');
     $('[href^="#"]').click(function(){
       var $this = $(this);
       if( $($this.attr('href')).length && $this.attr('href') !== '#' ){
         var smoothAnchorScrollTime = 500 + (Math.floor($($this.attr("href")).offset().top))/2;
-        var scrollEvents = "scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove";
+        if(force){
+          var scrollEvents = "";
+        }else{
+          var scrollEvents = "scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove";
+        }
         var $page = $('html, body');
 
         $page.on(scrollEvents, function(){

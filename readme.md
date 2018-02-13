@@ -1,6 +1,7 @@
 # Scrollimate 2.0! (beta)
 
-Scrollimate focuses on features and functions related to scrolling, animations (hence the name), but includes also other functionalities.
+Scrollimate focuses on features and functions related to scrolling, animations (hence the name), but includes also other functionalities.  
+**Scrollimate 2.0 adds a new and improved [Init Method](#init), which means you can finally call all your methods with one function call!**
 
 ## Table of Contents
 

@@ -46,59 +46,61 @@ Each of the functionalities are implemented as methods of the scrollimate object
 
 ### <a name="init"></a>1.) INIT METHOD
 
-
-Hello Everyone!
-
-Scrollimate’s INIT method now accepts arguments! 
+<div style="background: pink; padding: 2%;">
+    <br>
+Hello Everyone!!<br>
+<br>
+<b>Scrollimate’s INIT method now accepts arguments!</b>
+<br>
+<br>
 Not that you’ve been missing it, but you now can call ALL your scrollimate methods, with as many parameters and arguments as you like!
+<br>
+<br>
+Amazed? Happy? Here’s how it works:
+<br>
+<br>
+</div>
 
-Here’s how it works:
 
-
-      scrollimate.init({
-            saParallax: false,
-            saScroll: "force",
-            saRipple: {
-                color: "rgba(0,255,0,0.7)",
-                interaction: "mouseover",
-                target: $("h1"),
-                noclass: true
-            },
-            saAccordion: ['.secondElement', '66.66', 'mouseover', '100px'],
-          });
+    scrollimate.init({
+        saParallax: false,
+        saScroll: "force",
+        saRipple: {
+            color: "rgba(0,255,0,0.7)",
+            interaction: "mouseover",
+            target: $("h1"),
+            noclass: true
+        },
+        saAccordion: ['.secondElement', '66.66', 'mouseover', '100px'],
+    });
 
 As you can tell, scrollimate.init now takes its arguments in the form of a javascript object. Or, if you don’t care about that, just put a pair of {} inside the () and list your methods, followed by a colon, followed by your arguments!
 
 Keep in mind the following: 
 
-- On Methods that require no arguments, or that you wish to call without arguments, please call them with false like so:
-  saParallax: false,
+- On Methods that require *no arguments*, or that you wish to call without arguments, please call them with false like so:
+  `saParallax: false,`
 
-- Simple Arguments can be given as strings like so 
-  saScroll: "force",
+- *Simple Arguments* can be given as strings like so:  
+  `saScroll: "force",`
 
-- Older Methods that require more than one argument should be called with the arguments wrapped in an array:
-  saAccordion: ['.secondElement', '66.66', 'mouseover', '100px'],
+- *Older Methods* that require more than one argument should be called with the arguments wrapped in an array:
+  `saAccordion: ['.secondElement', '66.66', 'mouseover', '100px'],`
 
-- And newer Methods that use the object-style function call are super easy: Keep them as is!
-  saRipple: {
-                color: "rgba(0,255,0,0.7)",
-                interaction: "mouseover",
-                target: $("h1"),
-                noclass: true
-            },
-
-
-Boom!
-
-The old way of calling init STILL WORKS as well, so you can update scrollimate and your sites (likely) won’t break (mileage may vary).
+- And *newer Methods* that use the object-style function call are super easy: Keep them as is!
+    `saRipple: {
+        color: "rgba(0,255,0,0.7)",
+        interaction: "mouseover",
+        target: $("h1"),
+        noclass: true
+    },`
 
 
+**Boom!**
 
+The classic (i.e. old) way of calling init STILL WORKS as well, so you can update scrollimate and your sites (likely) won’t break (mileage may vary).
 
-(Parallax is called via the init method)
-
-The init function takes a single argument, an array of the methods you want to use, for example:
+The classic init function takes a single argument, an array of the methods you want to use, for example:
 
     scrollimate.init(['saScroll', 'parallax'])
 
@@ -107,7 +109,7 @@ will initiate the Smooth Anchor Sroll and Parallax functions
 
 ### <a name="manually"></a>2.) CALLING METHODS MANUALLY
 
-While you can call (almost) every method via *init*, you can also call the methods each manually, such as:
+While you can call ~~(almost)~~ every method via NEW *init*, you can also call the methods each manually, such as:
 
     scrollimate.saTabs();
 
@@ -199,8 +201,6 @@ The above method cancels any scroll on user-input, in order to preserve and resp
 Alternatively, you can *force* the scroll by calling the method with a force argument like so:
 
 `scrollimate.saScroll('force')`
-
-As with any method called with arguments, you can currently NOT call this functionality via the init method.
 
 _
 
@@ -297,7 +297,7 @@ You can control the type of transition between tabs with the `data-tabscrollnavc
 
 You may not want your tabs to be indexed / indexable. SA Tabs keeps track of your tabs via the URL, by adding a fragment (“hash”) to the end of the URL. **But what if you have an application on your page that already does that?**
 
-Now SA Tabs can accomodate, by simply calling the `nonIDTabs();` method some time *after* the initial setup. (You can it as an additional argument to the `init` method, *after* the `saTabs` Method) This will not index your tabs, not write to the URL, but still keep the same markup and functionality for your tabs.
+Now SA Tabs can accomodate, by simply calling the `nonIDTabs();` method some time *after* the initial setup. (You can call it as an additional argument to the `init` method, *after* the `saTabs` Method) This will not index your tabs, not write to the URL, but still keep the same markup and functionality for your tabs.
 
 ### <a name="saTabsExclusion"></a>EXCLUDE LINKS
 
@@ -317,8 +317,6 @@ Now Tabscroll can accomodate, by simply calling the `saTabs.nonIDTabs()`; method
 # <a name="saScrollclass"></a>SA Scroll Class
 
 Will add a specifiable class to any element when a target element is scrolled, and remove it when it stops scrolling.  
-
-_as of right now, this method_  **_cannot_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
 
 #### <a name="saScrollclassBasic"></a>BASIC SETUP:
 
@@ -340,8 +338,6 @@ In the above example, the `.topnav` Element will get the `scrolling` class when 
 (examples: https://codepen.io/justMoritz/pen/vJVZVd)
 
 A simple _horizontal_ accordion for an infinite number of elements.
-
-_as of right now, this method_  **_cannot_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
 
 #### <a name="saAccordionBasic"></a>BASIC SETUP:
 
@@ -371,8 +367,6 @@ If you like the idea of having a link underlined, because it makes them easily i
 
 This method will wrap each word inside a link (anchor tag) in it's own span, which you can then style (or style it's pseudo element). See the Demo link for some examples.
 
-_for full functianlity (aka, with arguments), this method can current_ **_not_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
-
 #### <a name="saUnderlineBasic"></a>BASIC SETUP:
 
 The following will target all links:
@@ -381,16 +375,12 @@ The following will target all links:
 2. Call the Method once on the page with _two arguments_ like so: `<script> scrollimate.saUnderline(); </script>` 
 3. Apply the styles you want to `a span:before` (or something simliar).
 
-*note:* You _can_ call this basic setup via this init() method. 
-
 #### <a name="saUnderlineAdvanced"></a>Advanced SETUP:
 
 If you pass a parameter, it will target 
 
 1 Same as above, but ...
 2. ...call with `scrollimate.saUnderline( $('your-selector-here') );`
-
-*note:* You can currently _not_ call this advanced setup via this init() method. 
 
 ---
 ---
@@ -401,8 +391,6 @@ If you pass a parameter, it will target
 Add a material-design-like ripple effect that activates on click.
 
 
-_for full functianlity (aka, with arguments), this method can current_ **_not_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
-
 #### <a name="saRippleBasic"></a>BASIC SETUP:
 
 The following will target all links:
@@ -410,8 +398,6 @@ The following will target all links:
 1. Follow the Instructions for Scrollimate Installation
 2. Give the elements you want to have the ripple-effect a class of `.ripple`.
 3. Call the Method once on the page with _two arguments_ like so: `<script> scrollimate.saRipple(); </script>` 
-
-*note:* You _can_ call this basic setup via this init() method. 
 
 #### <a name="saRippleAdvanced"></a>Advanced SETUP:
 
@@ -434,11 +420,6 @@ Finally, you can combile all the arments and may end up with something like this
       target: $('.mouseclass'),
       noclass: true
     });
-
-*note:* You can currently _not_ call this advanced setup via this init() method. 
-
-
-
 
 
 

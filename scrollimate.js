@@ -603,15 +603,25 @@ var scrollimate = (function( window, $ ){
     *
     */
   var init = function(input){
-    console.log('Running Scrollimate with the following input: ' + input );
+    // console.log('Running Scrollimate with the following input: ' + input );
 
     $(function(){
       _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
 
+      console.log(input)
+
       for(i=0; i < input.length; i++){
         console.log( input[i] );
-        _executeFunctionByName("scrollimate."+input[i]+"");
+        eval(input[i]);
+        // _executeFunctionByName("scrollimate."+input[i]+"");
       }
+
+      // loops through each argument given.
+      // for (var key in input){
+      //   console.log( key );
+      //   console.log( typeof input[key] );
+      //   console.log( key+"("+input[key]+")" );
+      // }
 
       $(window).resize(function(){
         _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 

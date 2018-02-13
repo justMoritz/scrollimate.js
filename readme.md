@@ -1,4 +1,4 @@
-# Scrollimate!
+# Scrollimate 2.0! (beta)
 
 Scrollimate focuses on features and functions related to scrolling, animations (hence the name), but includes also other functionalities.
 
@@ -45,6 +45,56 @@ Each of the functionalities are implemented as methods of the scrollimate object
 
 
 ### <a name="init"></a>1.) INIT METHOD
+
+
+Hello Everyone!
+
+Scrollimate’s INIT method now accepts arguments! 
+Not that you’ve been missing it, but you now can call ALL your scrollimate methods, with as many parameters and arguments as you like!
+
+Here’s how it works:
+
+
+      scrollimate.init({
+            saParallax: false,
+            saScroll: "force",
+            saRipple: {
+                color: "rgba(0,255,0,0.7)",
+                interaction: "mouseover",
+                target: $("h1"),
+                noclass: true
+            },
+            saAccordion: ['.secondElement', '66.66', 'mouseover', '100px'],
+          });
+
+As you can tell, scrollimate.init now takes its arguments in the form of a javascript object. Or, if you don’t care about that, just put a pair of {} inside the () and list your methods, followed by a colon, followed by your arguments!
+
+Keep in mind the following: 
+
+- On Methods that require no arguments, or that you wish to call without arguments, please call them with false like so:
+  saParallax: false,
+
+- Simple Arguments can be given as strings like so 
+  saScroll: "force",
+
+- Older Methods that require more than one argument should be called with the arguments wrapped in an array:
+  saAccordion: ['.secondElement', '66.66', 'mouseover', '100px'],
+
+- And newer Methods that use the object-style function call are super easy: Keep them as is!
+  saRipple: {
+                color: "rgba(0,255,0,0.7)",
+                interaction: "mouseover",
+                target: $("h1"),
+                noclass: true
+            },
+
+
+Boom!
+
+The old way of calling init STILL WORKS as well, so you can update scrollimate and your sites (likely) won’t break (mileage may vary).
+
+
+
 
 (Parallax is called via the init method)
 

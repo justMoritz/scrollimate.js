@@ -603,51 +603,47 @@ var scrollimate = (function( window, $ ){
     *
     */
   var init = function(input){
-    // console.log('Running Scrollimate with the following input: ' + input );
 
     $(function(){
       _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
 
-      // console.log(input)
 
-      // for(i=0; i < input.length; i++){
-
-        // eval(input[i]);
-        // console.log( input[i] )
-
-
-        // var current = window['scrollimate'][input[i]];
-        // console.log( typeof current);
-        // _executeFunctionByName("scrollimate."+input[i]+"");
-      // }
-
-      // loops through each argument given. Key should be the function name, input[key] the arguments to the function
-      console.log( 'Init Method calling the following Methods: ' )
-      for (var key in input){
-        console.log( key );
-        console.log( input[key] );
-
-        var current = window['scrollimate'][key];
-
-        // if the function exists
-        if (typeof current === "function"){
-          // check if parameter given is in the form of an array
-          var isArr = Object.prototype.toString.call(input[key]) == '[object Array]';
-          // if it is, procee with apply
-          if( isArr ){
-            current.apply(null, input[key])
-          }
-          //else, use call
-          else{
-            current.call(null, input[key])
-          }
-          
-          // eval( current(input[key]) )
+      // checks if the init method was called with the old way,
+      // if so, loops through the array and executes each function by name
+      var calledWithArr = Object.prototype.toString.call(input) == '[object Array]';
+      if( calledWithArr ){
+        console.log( 'Classic Init Method classically calling the following Methods: ' )
+        for(i=0; i < input.length; i++){
+          console.log( input[i] );
+          _executeFunctionByName("scrollimate."+input[i]+"");
         }
 
 
-        // console.log( key+"("+input[key]+")" );
-      }
+      // Otherwise, loops through each argument given as an object (new way)
+      // Key should be the function name, input[key] the arguments to the function
+      }else{
+        console.log( 'Init Method calling the following Methods: ' )
+        for (var key in input){
+          console.log( key );
+          console.log( input[key] );
+
+          var current = window['scrollimate'][key];
+
+          // if the function exists
+          // check if parameter given is in the form of an array
+          // if it is, proceed with apply
+          // else, use call
+          if (typeof current === "function"){
+            var isArr = Object.prototype.toString.call(input[key]) == '[object Array]';
+            if( isArr ){
+              current.apply(null, input[key])
+            }else{
+              current.call(null, input[key])
+            }
+          }
+        } 
+
+      } //end else/calledWithArr
 
       $(window).resize(function(){
         _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 

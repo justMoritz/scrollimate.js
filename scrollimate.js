@@ -621,14 +621,27 @@ var scrollimate = (function( window, $ ){
         // _executeFunctionByName("scrollimate."+input[i]+"");
       // }
 
-      // loops through each argument given.
+      // loops through each argument given. Key should be the function name, input[key] the arguments to the function
+      console.log( 'Init Method calling the following Methods: ' )
       for (var key in input){
-        // console.log( key );
-        // console.log( input[key] );
+        console.log( key );
+        console.log( input[key] );
 
         var current = window['scrollimate'][key];
+
+        // if the function exists
         if (typeof current === "function"){
-          current.call(null, input[key])
+          // check if parameter given is in the form of an array
+          var isArr = Object.prototype.toString.call(input[key]) == '[object Array]';
+          // if it is, procee with apply
+          if( isArr ){
+            current.apply(null, input[key])
+          }
+          //else, use call
+          else{
+            current.call(null, input[key])
+          }
+          
           // eval( current(input[key]) )
         }
 

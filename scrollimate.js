@@ -268,7 +268,7 @@ var scrollimate = (function( window, $ ){
       if(!_global.indexable){
         $curEl.removeAttr("href").css('cursor', 'pointer');
         $curEl.on('click', function(){
-          var tab_target = $(this).parent().attr("data-tabscrollnavi");
+          var tab_target = $(this).parent().attr("data-tabscrollnavi"); // TODO ... need to verify this does not break
           // console.log( tab_target );
           _saTabsHashChangeFunct(tab_target);
         });

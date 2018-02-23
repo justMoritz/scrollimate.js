@@ -1,4 +1,4 @@
-/* Scrollimate 1.3.4
+/* Scrollimate 1.6.1
  *
  * written by Moritz Zimmer, 2016 – 2018
  * http://www.moritzzimmer.com
@@ -256,12 +256,12 @@ var scrollimate = (function( window, $ ){
   var _saTabsSetUpPage = function() {
     $tabscrollAnchors = $("[data-tabscrollnavcontainer]").find("a").not("[data-saexclude]");
     $transition_type = $("[data-tabscrollnavcontainer]").attr("data-tabscrollnavcontainer");
-    $($tabscrollAnchors[0]).parent().addClass("tabscroll_activeNavi");
+    $($tabscrollAnchors[0]).addClass("tabscroll_activeNavi");
 
     for ($i = 0; $i < $tabscrollAnchors.length; $i++){
       var $curEl = $($tabscrollAnchors[$i]),
           eachAnchor = $curEl.attr("href");
-      $curEl.parent().attr("data-tabscrollnavi", eachAnchor.substring(1)); 
+      $curEl.attr("data-tabscrollnavi", eachAnchor.substring(1)); 
       $(eachAnchor).attr("data-tabscroll", eachAnchor.substring(1));
 
       // removes link if in non-indexable version (to not interfere with app status keeping)

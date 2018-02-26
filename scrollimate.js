@@ -1,4 +1,4 @@
-/* Scrollimate 1.6.2
+/* Scrollimate 2
  *
  * written by Moritz Zimmer, 2016 – 2018
  * http://www.moritzzimmer.com
@@ -583,10 +583,24 @@ var scrollimate = (function( window, $ ){
         _execute(event, this);
       });
     }
-
-      
-    
   };
+ /**
+  * saRipple (jQuery extension)
+  *
+  * Extends the jQuery Object with the “saRipple” Method (jQuery.saRipple)
+  * The target (the element this method was run on) is added to the input,
+  * then it calls the (scollimate-internal) Method (scrollimate.saRipple)
+  */
+  jQuery.fn.saRipple = function(input) {
+    for(i=0; i < this.length; i++){
+      var passedinput = input;
+      passedinput.target = $(this[i]);
+      saRipple(passedinput);
+    }
+    return this;
+  };
+
+
 
 
   /** 
@@ -596,22 +610,54 @@ var scrollimate = (function( window, $ ){
     *
     * Parses the arguments-array given to the init method's call, loops through
     * them and then executes the function with the corresponding name. 
-    * No error-checking is currently enabled, but this may be a future feature addition 
+    * Some Error Checking Applies, and see comments further down for classic
+    * and Fallback Methods
     *
     * On Window Resize, re-calculate the window height, and re-run parallax, if is enabled
     * On window scroll, update the window position variable (_global.wp), and re-run parallax, if enabled
     *
     */
   var init = function(input){
-    console.log('Running Scrollimate with the following input: ' + input );
 
     $(function(){
       _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
 
-      for(i=0; i < input.length; i++){
-        console.log( input[i] );
-        _executeFunctionByName("scrollimate."+input[i]+"");
-      }
+
+      // checks if the init method was called with the old way,
+      // if so, loops through the array and executes each function by name
+      var calledWithArr = Object.prototype.toString.call(input) == '[object Array]';
+      if( calledWithArr ){
+        console.log( 'Classic Init Method classically calling the following Methods: ' )
+        for(i=0; i < input.length; i++){
+          console.log( input[i] );
+          _executeFunctionByName("scrollimate."+input[i]+"");
+        }
+
+
+      // Otherwise, loops through each argument given as an object (new way)
+      // Key should be the function name, input[key] the arguments to the function
+      }else{
+        console.log( 'Init Method calling the following Methods: ' )
+        for (var key in input){
+
+          var current = window['scrollimate'][key];
+          console.log( key );
+
+          // if the function exists
+          // check if parameter given is in the form of an array
+          // if it is, proceed with apply
+          // else, use call
+          if (typeof current === "function"){
+            var isArr = Object.prototype.toString.call(input[key]) == '[object Array]';
+            if( isArr ){
+              current.apply(null, input[key])
+            }else{
+              current.call(null, input[key])
+            }
+          }
+        } 
+
+      } //end else/calledWithArr
 
       $(window).resize(function(){
         _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
@@ -650,3 +696,8 @@ var scrollimate = (function( window, $ ){
     enableMobile: enableMobile,
   };
 })(window, jQuery);
+
+
+
+
+

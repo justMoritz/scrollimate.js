@@ -318,12 +318,25 @@ var scrollimate = (function( window, $ ){
     }
     else{
       location = String(document.location);    
-      location = location = location.split("#")[1]; // wtf is this ...
+      location = location = location.split("#")[1]; // if the location is not passed as master input, we use the has instead!
     }
 
-    if (location === undefined || location === 'all' ){
-        $("[data-tabscroll]:first-of-type").show();   
-        $("[data-tabscroll]:first-of-type").addClass('activeTab');   
+    // check if location resolves to a tab and sets the exists variable to true
+    var $allTabs = $("[data-tabscroll]");
+    var exists = false;
+    for(i=0; i < $allTabs.length; i++){
+      var curtab = $($allTabs[i]).attr('data-tabscroll');
+      console.log( curtab );
+      if( curtab === location ){
+        exists = true;
+      }
+    }
+
+    if (location === undefined || location === 'all' || exists === false){
+      var $firstTab = $("[data-tabscroll]:first-of-type");
+      $firstTab.show();   
+      $firstTab.addClass('activeTab');
+      window.location.hash = $firstTab.attr('data-tabscroll');
     }
     else{
       $("[data-tabscroll]").hide().removeClass('activeTab');   
@@ -696,8 +709,3 @@ var scrollimate = (function( window, $ ){
     enableMobile: enableMobile,
   };
 })(window, jQuery);
-
-
-
-
-

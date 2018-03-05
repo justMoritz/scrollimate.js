@@ -7,7 +7,7 @@
  * https://creativecommons.org/licenses/by/4.0/legalcode
  *
  */
-var scrollimate = (function( $ ){
+var scrollimate = (function( window, $ ){
 
   var _global = {
     wp:   0,
@@ -90,6 +90,7 @@ var scrollimate = (function( $ ){
       }
     }      
   };
+
 
   /**
    *
@@ -742,4 +743,4 @@ var scrollimate = (function( $ ){
     nonIDTabs: nonIDTabs,
     enableMobile: enableMobile,
   };
-})(jQuery);
+})(window, jQuery);

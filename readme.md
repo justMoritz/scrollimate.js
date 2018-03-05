@@ -308,6 +308,10 @@ SA Accordion takes **at** **least** **one**, but can take four arguments:
 3. (optional) The type of event that raises the change over the element selected in argument 1. Can be click, mouseover, mouseout, etc. If left blank, defaults to CLICK
 4. (optional) You can determin the height of the element, in pixels, or in percent of the width of the individual element. (This is done via padding-bottom)
 
+#### jQuery Method:
+
+You can run it via jQuery as well: `$('.secondElement').saAccordion();`. You can pass arguments as well: `$('.secondElement').saAccordion('66.66', 'mouseover', '100px');`
+
 Please note that SA Accordion works with float: left;, and will take up 100% of the width of its container, so please plan your markup accordingly. 
 
 
@@ -340,7 +344,9 @@ If you pass a parameter, it will target
 1 Same as above, but ...
 2. ...call with `scrollimate.saUnderline( $('your-selector-here') );`
 
-*note:* You can currently _not_ call this advanced setup via this init() method. 
+#### jQuery Method:
+
+`$('.another_dimension').saUnderline();`. It's really that simple!
 
 ---
 ---
@@ -359,9 +365,18 @@ The following will target all links:
 =
 1. Follow the Instructions for Scrollimate Installation
 2. Give the elements you want to have the ripple-effect a class of `.ripple`.
-3. Call the Method once on the page with _two arguments_ like so: `<script> scrollimate.saRipple(); </script>` 
+3. Call the Method once on the page with like so: `<script> scrollimate.saRipple(); </script>` 
 
 *note:* You _can_ call this basic setup via this init() method. 
+
+#### jQuery Method:
+
+You can also call it via jQuery like `$('.your-selector').saRipple();`, and of course you can pass arguments with it as well:
+    $('.your-selector').saRipple({
+        color: "rgba(0,255,0,0.7)",
+        interaction: "mouseover",
+        noclass: true
+    });
 
 #### <a name="saRippleAdvanced"></a>Advanced SETUP:
 

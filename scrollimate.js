@@ -1,4 +1,4 @@
-/* Scrollimate 1.6.2
+/* Scrollimate 2
  *
  * written by Moritz Zimmer, 2016 – 2018
  * http://www.moritzzimmer.com
@@ -318,12 +318,25 @@ var scrollimate = (function( window, $ ){
     }
     else{
       location = String(document.location);    
-      location = location = location.split("#")[1]; // wtf is this ...
+      location = location = location.split("#")[1]; // if the location is not passed as master input, we use the has instead!
     }
 
-    if (location === undefined || location === 'all' ){
-        $("[data-tabscroll]:first-of-type").show();   
-        $("[data-tabscroll]:first-of-type").addClass('activeTab');   
+    // check if location resolves to a tab and sets the exists variable to true
+    var $allTabs = $("[data-tabscroll]");
+    var exists = false;
+    for(i=0; i < $allTabs.length; i++){
+      var curtab = $($allTabs[i]).attr('data-tabscroll');
+      console.log( curtab );
+      if( curtab === location ){
+        exists = true;
+      }
+    }
+
+    if (location === undefined || location === 'all' || exists === false){
+      var $firstTab = $("[data-tabscroll]:first-of-type");
+      $firstTab.show();   
+      $firstTab.addClass('activeTab');
+      window.location.hash = $firstTab.attr('data-tabscroll');
     }
     else{
       $("[data-tabscroll]").hide().removeClass('activeTab');   
@@ -409,6 +422,10 @@ var scrollimate = (function( window, $ ){
     });
   };
 
+  jQuery.fn.getSelector = function() {
+    return this.data('selector');
+  };
+
 
   /**
    *
@@ -423,6 +440,7 @@ var scrollimate = (function( window, $ ){
   var saAccordion = function(element, mainwidthinpercent, type, imageaspectratio){
     var __saAccordionHelper = function(){
       var $element = $(element);
+          console.log( $element );
       if (mainwidthinpercent === undefined){
         mainwidthinpercent = '50';
       }
@@ -437,13 +455,13 @@ var scrollimate = (function( window, $ ){
         $element.css('float', 'left');
         $element.css('padding-bottom', imageaspectratio); 
         $element.css('width', restwidth+'%').removeClass('active');
-        $(element+':first-of-type').css('width', mainwidthinpercent+'%').addClass('active');   
+        $($element[0]).css('width', mainwidthinpercent+'%').addClass('active');   
       } 
       // mobile functionality
       else{
         $element.css('width', '100%');
         $element.css('height', 0).css('padding-bottom', restwidth+'%').removeClass('active');
-        $(element+':first-of-type').css('height', 0).css('padding-bottom', mainwidthinpercent+'%').addClass('active');   
+        $($element[0]).css('height', 0).css('padding-bottom', mainwidthinpercent+'%').addClass('active');   
       }
 
       // if no type is given, default to click
@@ -474,12 +492,23 @@ var scrollimate = (function( window, $ ){
     });
   };
 
+  /**
+   * saAccordion (jQuery extension)
+   *  
+   * Extends the jQuery Object with the saUnderline Method (jQuery.saUnderline)
+   */
+  jQuery.fn.saAccordion = function(mainwidthinpercent, type, imageaspectratio) {
+    saAccordion(this, mainwidthinpercent, type, imageaspectratio);
+    return this;
+  };
+
+
 
   /**
    * saUnderline
    *
-   * @ Targets either all <a> anchor tags, 
-   * @ or and FULL jQuery selector 
+   * Targets either all <a> anchor tags, 
+   * or and FULL jQuery selector 
    *
    * wraps each word in a link tag in a span with class of underline,
    * for the purpose of better stying underlines via pseudo classes
@@ -495,6 +524,16 @@ var scrollimate = (function( window, $ ){
         $(cur).append($("<span class='underline'>").text(v+' '));
       });
     }              
+  };
+
+  /**
+   * saUnderline (jQuery extension)
+   *  
+   * Extends the jQuery Object with the saUnderline Method (jQuery.saUnderline)
+   */
+  jQuery.fn.saUnderline = function() {
+    scrollimate.saUnderline( $(this) );
+    return this;
   };
 
 
@@ -583,10 +622,34 @@ var scrollimate = (function( window, $ ){
         _execute(event, this);
       });
     }
-
-      
-    
   };
+ 
+  /**
+   *  saRipple (jQuery extension)
+   *  
+   * Extends the jQuery Object with the “saRipple” Method (jQuery.saRipple)
+   * The target (the element this method was run on) is added to the input,
+   * then it calls the (scollimate-internal) Method (scrollimate.saRipple)
+   * 
+   * @param  input  JSON (Optional)
+   * @return        appended jQuery Object
+   */
+  jQuery.fn.saRipple = function(input) {
+    var passedinput;
+    for(i=0; i < this.length; i++){
+      if(input === undefined){
+        passedinput = { target: $(this[i]) };
+      }
+      else{
+        passedinput = input;
+        passedinput.target = $(this[i]);
+      }
+      saRipple(passedinput);
+    }
+    return this;
+  };
+
+
 
 
   /** 
@@ -596,22 +659,52 @@ var scrollimate = (function( window, $ ){
     *
     * Parses the arguments-array given to the init method's call, loops through
     * them and then executes the function with the corresponding name. 
-    * No error-checking is currently enabled, but this may be a future feature addition 
+    * Some Error Checking Applies, and see comments further down for classic
+    * and Fallback Methods
     *
     * On Window Resize, re-calculate the window height, and re-run parallax, if is enabled
     * On window scroll, update the window position variable (_global.wp), and re-run parallax, if enabled
     *
     */
   var init = function(input){
-    console.log('Running Scrollimate with the following input: ' + input );
 
     $(function(){
       _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
 
-      for(i=0; i < input.length; i++){
-        console.log( input[i] );
-        _executeFunctionByName("scrollimate."+input[i]+"");
-      }
+      // checks if the init method was called with the old way,
+      // if so, loops through the array and executes each function by name
+      var calledWithArr = Object.prototype.toString.call(input) == '[object Array]';
+      if( calledWithArr ){
+        console.log( 'Classic Init Method classically calling the following Methods: ' )
+        for(i=0; i < input.length; i++){
+          console.log( input[i] );
+          _executeFunctionByName("scrollimate."+input[i]+"");
+        }
+
+      // Otherwise, loops through each argument given as an object (new way)
+      // Key should be the function name, input[key] the arguments to the function
+      }else{
+        console.log( 'Init Method calling the following Methods: ' )
+        for (var key in input){
+
+          var current = window['scrollimate'][key];
+          console.log( key );
+
+          // if the function exists
+          // check if parameter given is in the form of an array
+          // if it is, proceed with apply
+          // else, use call
+          if (typeof current === "function"){
+            var isArr = Object.prototype.toString.call(input[key]) == '[object Array]';
+            if( isArr ){
+              current.apply(null, input[key])
+            }else{
+              current.call(null, input[key])
+            }
+          }
+        } 
+
+      } //end else/calledWithArr
 
       $(window).resize(function(){
         _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 

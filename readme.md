@@ -371,13 +371,7 @@ The following will target all links:
 
 #### jQuery Method:
 
-You can also call it via jQuery like `$('.your-selector').saRipple();`, and of course you can pass arguments with it as well:
-
-    $('.your-selector').saRipple({
-        color: "rgba(0,255,0,0.7)",
-        interaction: "mouseover",
-        noclass: true
-    }); 
+You can also call it via jQuery like `$('.your-selector').saRipple();`
 
 #### <a name="saRippleAdvanced"></a>Advanced SETUP:
 
@@ -400,6 +394,14 @@ Finally, you can combile all the arments and may end up with something like this
       target: $('.mouseclass'),
       noclass: true
     });
+
+#### jQuery Advanced Method:
+
+    $('.your-selector').saRipple({
+        color: "rgba(0,255,0,0.7)",
+        interaction: "mouseover",
+        noclass: true
+    }); 
 
 *note:* You can currently _not_ call this advanced setup via this init() method. 
 

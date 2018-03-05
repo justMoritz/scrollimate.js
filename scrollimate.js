@@ -422,6 +422,10 @@ var scrollimate = (function( window, $ ){
     });
   };
 
+  jQuery.fn.getSelector = function() {
+    return this.data('selector');
+  };
+
 
   /**
    *
@@ -436,6 +440,7 @@ var scrollimate = (function( window, $ ){
   var saAccordion = function(element, mainwidthinpercent, type, imageaspectratio){
     var __saAccordionHelper = function(){
       var $element = $(element);
+          console.log( $element );
       if (mainwidthinpercent === undefined){
         mainwidthinpercent = '50';
       }
@@ -450,13 +455,13 @@ var scrollimate = (function( window, $ ){
         $element.css('float', 'left');
         $element.css('padding-bottom', imageaspectratio); 
         $element.css('width', restwidth+'%').removeClass('active');
-        $(element+':first-of-type').css('width', mainwidthinpercent+'%').addClass('active');   
+        $($element[0]).css('width', mainwidthinpercent+'%').addClass('active');   
       } 
       // mobile functionality
       else{
         $element.css('width', '100%');
         $element.css('height', 0).css('padding-bottom', restwidth+'%').removeClass('active');
-        $(element+':first-of-type').css('height', 0).css('padding-bottom', mainwidthinpercent+'%').addClass('active');   
+        $($element[0]).css('height', 0).css('padding-bottom', mainwidthinpercent+'%').addClass('active');   
       }
 
       // if no type is given, default to click
@@ -487,12 +492,23 @@ var scrollimate = (function( window, $ ){
     });
   };
 
+  /**
+   * saAccordion (jQuery extension)
+   *  
+   * Extends the jQuery Object with the saUnderline Method (jQuery.saUnderline)
+   */
+  jQuery.fn.saAccordion = function(mainwidthinpercent, type, imageaspectratio) {
+    saAccordion(this, mainwidthinpercent, type, imageaspectratio);
+    return this;
+  };
+
+
 
   /**
    * saUnderline
    *
-   * @ Targets either all <a> anchor tags, 
-   * @ or and FULL jQuery selector 
+   * Targets either all <a> anchor tags, 
+   * or and FULL jQuery selector 
    *
    * wraps each word in a link tag in a span with class of underline,
    * for the purpose of better stying underlines via pseudo classes
@@ -508,6 +524,16 @@ var scrollimate = (function( window, $ ){
         $(cur).append($("<span class='underline'>").text(v+' '));
       });
     }              
+  };
+
+  /**
+   * saUnderline (jQuery extension)
+   *  
+   * Extends the jQuery Object with the saUnderline Method (jQuery.saUnderline)
+   */
+  jQuery.fn.saUnderline = function() {
+    scrollimate.saUnderline( $(this) );
+    return this;
   };
 
 
@@ -597,17 +623,27 @@ var scrollimate = (function( window, $ ){
       });
     }
   };
- /**
-  * saRipple (jQuery extension)
-  *
-  * Extends the jQuery Object with the “saRipple” Method (jQuery.saRipple)
-  * The target (the element this method was run on) is added to the input,
-  * then it calls the (scollimate-internal) Method (scrollimate.saRipple)
-  */
+ 
+  /**
+   *  saRipple (jQuery extension)
+   *  
+   * Extends the jQuery Object with the “saRipple” Method (jQuery.saRipple)
+   * The target (the element this method was run on) is added to the input,
+   * then it calls the (scollimate-internal) Method (scrollimate.saRipple)
+   * 
+   * @param  input  JSON (Optional)
+   * @return        appended jQuery Object
+   */
   jQuery.fn.saRipple = function(input) {
+    var passedinput;
     for(i=0; i < this.length; i++){
-      var passedinput = input;
-      passedinput.target = $(this[i]);
+      if(input === undefined){
+        passedinput = { target: $(this[i]) };
+      }
+      else{
+        passedinput = input;
+        passedinput.target = $(this[i]);
+      }
       saRipple(passedinput);
     }
     return this;
@@ -635,7 +671,6 @@ var scrollimate = (function( window, $ ){
     $(function(){
       _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight; 
 
-
       // checks if the init method was called with the old way,
       // if so, loops through the array and executes each function by name
       var calledWithArr = Object.prototype.toString.call(input) == '[object Array]';
@@ -645,7 +680,6 @@ var scrollimate = (function( window, $ ){
           console.log( input[i] );
           _executeFunctionByName("scrollimate."+input[i]+"");
         }
-
 
       // Otherwise, loops through each argument given as an object (new way)
       // Key should be the function name, input[key] the arguments to the function

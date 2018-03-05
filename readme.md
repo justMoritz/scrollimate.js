@@ -377,7 +377,7 @@ You can also call it via jQuery like `$('.your-selector').saRipple();`, and of c
         color: "rgba(0,255,0,0.7)",
         interaction: "mouseover",
         noclass: true
-    });
+    }); 
 
 #### <a name="saRippleAdvanced"></a>Advanced SETUP:
 

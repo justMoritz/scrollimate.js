@@ -372,11 +372,11 @@ The following will target all links:
 #### jQuery Method:
 
 You can also call it via jQuery like `$('.your-selector').saRipple();`, and of course you can pass arguments with it as well:
-    $('.your-selector').saRipple({
+    `$('.your-selector').saRipple({
         color: "rgba(0,255,0,0.7)",
         interaction: "mouseover",
         noclass: true
-    });
+    });`
 
 #### <a name="saRippleAdvanced"></a>Advanced SETUP:
 

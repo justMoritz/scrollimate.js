@@ -327,7 +327,7 @@ var scrollimate = (function( window, $ ){
     var exists = false;
     for(i=0; i < $allTabs.length; i++){
       var curtab = $($allTabs[i]).attr('data-tabscroll');
-      console.log( curtab );
+      // console.log( curtab );
       if( curtab === location ){
         exists = true;
       }
@@ -441,7 +441,7 @@ var scrollimate = (function( window, $ ){
   var saAccordion = function(element, mainwidthinpercent, type, imageaspectratio){
     var __saAccordionHelper = function(){
       var $element = $(element);
-          console.log( $element );
+          // console.log( $element );
       if (mainwidthinpercent === undefined){
         mainwidthinpercent = '50';
       }

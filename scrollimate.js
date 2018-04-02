@@ -337,7 +337,9 @@ var scrollimate = (function( window, $ ){
       var $firstTab = $("[data-tabscroll]:first-of-type");
       $firstTab.show();   
       $firstTab.addClass('activeTab');
-      window.location.hash = $firstTab.attr('data-tabscroll');
+      if(_global.indexable){
+        window.location.hash = $firstTab.attr('data-tabscroll');
+      }
     }
     else{
       $("[data-tabscroll]").hide().removeClass('activeTab');   

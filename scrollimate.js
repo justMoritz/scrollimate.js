@@ -300,6 +300,7 @@ var scrollimate = (function( window, $ ){
    *    funcionality, which I would like to break out into different functions eventually.
    */
   var _saTabsHashChangeFunct = function( masterinput ) {
+    $(document).trigger('satabchanged');
     /* checks the current location, matches it to the element containing the link, and adds correct class */
     var __activeClassHelperFunction = function(inputLoc){
       var $naviEls = $('[data-tabscrollnavi]');

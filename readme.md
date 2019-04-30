@@ -7,6 +7,7 @@ Scrollimate focuses on features and functions related to scrolling, animations (
 - [Setup and Usage](#setup)
      - [Init Method](#init)
      - [Calling Methods Manually](#manually)
+     - [as jQuery Extensions](#jquery)
 - [The Methods](#methods)
      - [SA Parallax](#saParallax)
          - [Basic Setup](#saParallaxBasic)
@@ -33,9 +34,9 @@ Scrollimate focuses on features and functions related to scrolling, animations (
          - [Basic Setup](#saRippleBasic)
          - [Advanced](#saUnderlineRipple)
 
-## <a name="setup"></a>Setup and Usage: 
+## <a name="setup"></a>Setup and Usage:
 
-This is a *jQuery Plugin*, so you'll need jQuery. 
+This is a *jQuery Plugin*, so you'll need jQuery.
 Include jQuery. Include scrollimate.js.
 
     <script src="path/to/your/scripts/jquery-2.1.4.min.js"></script>
@@ -47,6 +48,19 @@ Each of the functionalities are implemented as methods of the scrollimate object
 ### <a name="init"></a>1.) INIT METHOD
 
 (Parallax is called via the init method)
+
+##### JSON Method
+
+The init function takes a single argument, a JavaScript Object. Inidicate the name of the function as the key, and the arguments for that function as the value, like so:
+
+    scrollimate.init({
+        'saScroll', true
+    });
+
+will initiate the Smooth Anchor Sroll and Parallax functions
+
+
+##### Classic Init Method
 
 The init function takes a single argument, an array of the methods you want to use, for example:
 
@@ -62,6 +76,16 @@ While you can call (almost) every method via *init*, you can also call the metho
     scrollimate.saTabs();
 
 which will initiate the saTabs Function
+
+### <a name="jquery"></a>3.) jQuery Method
+
+Many Methods can be called as an extension of jQuery. See full documentation below for more detailed instructions.
+
+    $('.your-selector').saRipple({
+        color: "rgba(0,255,0,0.7)",
+        interaction: "mouseover",
+        noclass: true
+    });
 
 
 ## <a name="methods"></a>The Methods
@@ -92,18 +116,18 @@ The `data-sabglayer` will take two arguments:*
 
 - Supply a single number like so: `data-sabglayer="0.5"`
 
-Supply it a single number, this is the speed at which you want the element to scroll relative to the page speed. To create several layers of parallax, or simply to more fine-tune the effect, you can se the `data-sabglayer` attribute to any floating point value between 0 (which will cause the element to scroll normally) and 2 (which will cause the element to appear static on the page). 
+Supply it a single number, this is the speed at which you want the element to scroll relative to the page speed. To create several layers of parallax, or simply to more fine-tune the effect, you can se the `data-sabglayer` attribute to any floating point value between 0 (which will cause the element to scroll normally) and 2 (which will cause the element to appear static on the page).
 
 You can also use any number larger than 2, which will cause the element to scroll in the opposite direction of the scroll. And yes, you can also use negative numbers and make the element scroll faster than the page!
 
-#### Centering / Offset Control 
+#### Centering / Offset Control
 
 ![SA PARALLAX SAMPLE](http://files.moritzzimmer.com/saparallax3.gif)
 
 *See how in this example, the top hero-image parallaxes right away, but each following elements (images) only when it comes into view, and consistently for each element? SA Parallax can do that!*
 
 
-You can supply more than one argument to SA Parallax. This is useful if the element you wish to parallax is not at the top. Supplying two elements will cause the eement to only _start_ parallaxing _once in view_. 
+You can supply more than one argument to SA Parallax. This is useful if the element you wish to parallax is not at the top. Supplying two elements will cause the eement to only _start_ parallaxing _once in view_.
 
 **NEW in 1.3:**
 
@@ -114,7 +138,7 @@ You can supply more than one argument to SA Parallax. This is useful if the elem
 This will calculate the parallax so that the element will be in it's “ideal” position when centered vertically on the screen. Plus, (ideally) you would never see it parallax out of view in either direction. (Mileage may vary...)
 
 #### Custom Offset Elements
-  
+
 - Supply a second argument separated by comma like so: `data-sabglayer="-0.5, 0.25"`
 
 With this, you can define the position of parallaxing element. This is useful if you want the fine-control the element’s be position. This number is the fraction it is offset by it’s own hight. For example, `0.5` on a 500px tall element will cause it to be offset by 250px, `1` by 500px, etc.
@@ -126,7 +150,7 @@ If you don't want the element to be offset, but not start parallaxing until in v
 
 By default, parallax will not be enabled on screen sizes smaller than 768px. (Sidenote: This applies to initial screen-size: Whatever your page loaded with, determined whether or not parallax is enabled. This is by design so that check is not performed over and over).
 
-*You can re-enable* mobile parallax by calling the `enableMobile` before the saParallax method like so: 
+*You can re-enable* mobile parallax by calling the `enableMobile` before the saParallax method like so:
     `<script> scrollimate.init(['enableMobile', 'saParallax']); </script>`
 (If you are running the init function with other methods the order doens't matter, as long as saParallax gets called last).
 
@@ -150,7 +174,6 @@ Alternatively, you can *force* the scroll by calling the method with a force arg
 
 `scrollimate.saScroll('force')`
 
-As with any method called with arguments, you can currently NOT call this functionality via the init method.
 
 _
 
@@ -158,18 +181,18 @@ _
 ---
 ---
 
-# <a name="saTabs"></a>SA Tabs 
+# <a name="saTabs"></a>SA Tabs
 ![TABSCROLL SAMPLE](http://files.moritzzimmer.com/tabscroll.gif)
 
 Create simple, bookmarable, browser-history-respecting tab content on any website. No cluttered Markup: You just need to add **_one_** custom data-attribute.
 
 
 ### <a name="saTabsMarkup"></a>MARKUP:
-You need to have two things: 
+You need to have two things:
 
 #### <a name="saTabsMarkupNav"></a>1.) A Navigation of links, with each link wrapped in a parent.
 
-In the collection of links, link the links via #s to the sections. 
+In the collection of links, link the links via #s to the sections.
 For example, you may have two divs, one has the id of `id="one"`, the other `id="two"`
 Your links should link to `href="#one"` and `href="#two"`.
 
@@ -193,10 +216,10 @@ Wrap each parent to a link in another parent, and give it the following attribut
 
     <div data-tabscrollnavcontainer>
         <div>
-            <div>   
+            <div>
                 <a href="#one">One</a>
             </div>
-            <div>   
+            <div>
                 <a href="#two">Two</a>
             </div>
         </div>
@@ -266,14 +289,12 @@ Now Tabscroll can accomodate, by simply calling the `saTabs.nonIDTabs()`; method
 
 # <a name="saScrollclass"></a>SA Scroll Class
 
-Will add a specifiable class to any element when a target element is scrolled, and remove it when it stops scrolling.  
-
-_as of right now, this method_  **_cannot_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
+Will add a specifiable class to any element when a target element is scrolled, and remove it when it stops scrolling.
 
 #### <a name="saScrollclassBasic"></a>BASIC SETUP:
 
-- Follow the Instructions for Installation 
-- Call the Method once on the page: `<script> scrollimate.scrollClass( $(window), $('.topnav'), 'scrolling' ); </script>` 
+- Follow the Instructions for Installation
+- Call the Method once on the page: `<script> scrollimate.scrollClass( $(window), $('.topnav'), 'scrolling' ); </script>`
 
 SA Scroll Class takes three arguments:
 
@@ -281,7 +302,7 @@ SA Scroll Class takes three arguments:
 2. *complete jQuery selector* of the element that you want to add the class to (in the above example we are adding a class to the element with the `.topnav` class)
 3. The name of the class you want to add
 
-In the above example, the `.topnav` Element will get the `scrolling` class when the `window` is scrolled. 
+In the above example, the `.topnav` Element will get the `scrolling` class when the `window` is scrolled.
 
 ---
 ---
@@ -291,13 +312,11 @@ In the above example, the `.topnav` Element will get the `scrolling` class when 
 
 A simple _horizontal_ accordion for an infinite number of elements.
 
-_as of right now, this method_  **_cannot_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
-
 #### <a name="saAccordionBasic"></a>BASIC SETUP:
 
 1. You will need any number elements with the same selector, for example 5 divs with the class of `element`. _please float these elements left, inline or inline-block the, so they will be next to each other_ . Clearing the float etc. will be up to you.
 2. Follow the Instructions for Scrollimate Installation
-3. Call the Method once on the page with _two arguments_ like so: `<script> scrollimate.saAccordion('.element', '66.66'); </script>` 
+3. Call the Method once on the page with _two arguments_ like so: `<script> scrollimate.saAccordion('.element', '66.66'); </script>`
 
 #### <a name="saAccordionAdvanced"></a>Advanced SETUP:
 
@@ -312,7 +331,7 @@ SA Accordion takes **at** **least** **one**, but can take four arguments:
 
 You can run it via jQuery as well: `$('.secondElement').saAccordion();`. You can pass arguments as well: `$('.secondElement').saAccordion('66.66', 'mouseover', '100px');`
 
-Please note that SA Accordion works with float: left;, and will take up 100% of the width of its container, so please plan your markup accordingly. 
+Please note that SA Accordion works with float: left;, and will take up 100% of the width of its container, so please plan your markup accordingly.
 
 
 ---
@@ -325,21 +344,21 @@ If you like the idea of having a link underlined, because it makes them easily i
 
 This method will wrap each word inside a link (anchor tag) in it's own span, which you can then style (or style it's pseudo element). See the Demo link for some examples.
 
-_for full functianlity (aka, with arguments), this method can current_ **_not_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
+_for full functianlity (aka, with arguments), this method can current_ **_not_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :(
 
 #### <a name="saUnderlineBasic"></a>BASIC SETUP:
 
 The following will target all links:
 
 1. Follow the Instructions for Scrollimate Installation
-2. Call the Method once on the page with _two arguments_ like so: `<script> scrollimate.saUnderline(); </script>` 
+2. Call the Method once on the page with _two arguments_ like so: `<script> scrollimate.saUnderline(); </script>`
 3. Apply the styles you want to `a span:before` (or something simliar).
 
-*note:* You _can_ call this basic setup via this init() method. 
+*note:* You _can_ call this basic setup via this init() method.
 
 #### <a name="saUnderlineAdvanced"></a>Advanced SETUP:
 
-If you pass a parameter, it will target 
+If you pass a parameter, it will target
 
 1 Same as above, but ...
 2. ...call with `scrollimate.saUnderline( $('your-selector-here') );`
@@ -357,7 +376,7 @@ If you pass a parameter, it will target
 Add a material-design-like ripple effect that activates on click.
 
 
-_for full functianlity (aka, with arguments), this method can current_ **_not_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :( 
+_for full functianlity (aka, with arguments), this method can current_ **_not_** **_be_** **_called_** **_with_** **_the_** **_init_** **_method_** :(
 
 #### <a name="saRippleBasic"></a>BASIC SETUP:
 
@@ -365,9 +384,9 @@ The following will target all links:
 =
 1. Follow the Instructions for Scrollimate Installation
 2. Give the elements you want to have the ripple-effect a class of `.ripple`.
-3. Call the Method once on the page with like so: `<script> scrollimate.saRipple(); </script>` 
+3. Call the Method once on the page with like so: `<script> scrollimate.saRipple(); </script>`
 
-*note:* You _can_ call this basic setup via this init() method. 
+*note:* You _can_ call this basic setup via this init() method.
 
 #### jQuery Method:
 
@@ -375,7 +394,7 @@ You can also call it via jQuery like `$('.your-selector').saRipple();`
 
 #### <a name="saRippleAdvanced"></a>Advanced SETUP:
 
-You can set the ripple color in 3 ways: 
+You can set the ripple color in 3 ways:
   - use default: White. Nothin is needed other than the call the function one time on the page
   - When initializing saRipple, you can set the color by passing it as an argument, like so `scrollimate.saRipple({color: #ff4400});`
   - add the `data-ripplecolor` attribute the dom element, and put the complete CSS color therein
@@ -401,9 +420,9 @@ Finally, you can combile all the arments and may end up with something like this
         color: "rgba(0,255,0,0.7)",
         interaction: "mouseover",
         noclass: true
-    }); 
+    });
 
-*note:* You can currently _not_ call this advanced setup via this init() method. 
+*note:* You can currently _not_ call this advanced setup via this init() method.
 
 
 

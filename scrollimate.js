@@ -1,9 +1,14 @@
 /* Scrollimate 2
  *
- * written by Moritz Zimmer, 2016 – 2018
+ * written by Moritz Zimmer, 2016 – 2019
  * http://www.moritzzimmer.com
- *
- * (c) 2018 CC Attribution 4.0
+ *                      _ _                   _
+ *  ___  ___ _  __ ___ | | (_)_  __  __  __ _| |_  ___   (_)___
+ * / __|/ __| |/ //   \| | | | |/  |/  |/  ' |  _|/   \  | / __|
+ * \__ \ (__|  / | ( ) | | | | | | | | | ( ) | |_|  O_/  | \__ \ 
+ * |___/\___|__|  \___/|_|_|_|_| |_| |_|\__\_|\__|\___(_)/ |___/
+ *                                                     |__/
+ * (c) 2019 CC Attribution 4.0
  * https://creativecommons.org/licenses/by/4.0/legalcode
  *
  */

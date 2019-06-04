@@ -5,7 +5,7 @@
  *                      _ _                   _
  *  ___  ___ _  __ ___ | | (_)_  __  __  __ _| |_  ___   (_)___
  * / __|/ __| |/ //   \| | | | |/  |/  |/  ' |  _|/   \  | / __|
- * \__ \ (__|  / | ( ) | | | | | | | | | ( ) | |_|  O_/  | \__ \ 
+ * \__ \ (__|  / | ( ) | | | | | | | | | ( ) | |_|  O_/  | \__ \
  * |___/\___|__|  \___/|_|_|_|_| |_| |_|\__\_|\__|\___(_)/ |___/
  *                                                     |__/
  * (c) 2019 CC Attribution 4.0
@@ -726,18 +726,23 @@ var scrollimate = (function( window, $ ){
 
       // if the total amount of pixels the element will have moved
       // does not exceed the max. amount of pixels the element is allowed to move
-      if(
+       if(
         newXposition > modifier  ||
         newYposition > modifier  ||
         newXposition < -modifier ||
         newYposition < -modifier
       ){
-        // do nothing
+        if( newXposition > modifier*12  ||
+            newYposition > modifier*12  ||
+            newXposition < -modifier*12 ||
+            newYposition < -modifier*12
+        ){
+          $element.css('transform', 'translate('+ 0 + 'px, ' + 0 + 'px');
+        }
        }else{
          $element.css('transform', 'translate('+ newXposition + 'px, ' + newYposition + 'px');
        }
-    },
-  };
+    };
 
 
   /**

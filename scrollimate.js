@@ -743,6 +743,19 @@ var scrollimate = (function( window, $ ){
          $element.css('transform', 'translate('+ newXposition + 'px, ' + newYposition + 'px');
        }
     },
+
+
+    /**
+     * Adds class to all springy elements and creates
+     * unique styletag in head, if not already present
+     * @param  {jQUery}  the element to apply the springy functionality to
+     */
+    elementStyleSetup: function($passedElementName){
+      $passedElementName.addClass('scrollimate-springyelement');
+      if( !$("#scrollimate__springyelementstyles").length ){
+        $('<style id="scrollimate__springyelementstyles">.scrollimate-springyelement{transition: all 0.2s ease;}</style>').appendTo($('head'));
+      }
+    },
   };
 
 
@@ -755,6 +768,9 @@ var scrollimate = (function( window, $ ){
 
     // default setting for distance.
     distance = distance || 20;
+
+    // sets required styles for elements
+    _springyElementHelpers.elementStyleSetup($passedElement);
 
     // execute for each individual element
     $passedElement.each(function(){

@@ -33,6 +33,9 @@ Scrollimate focuses on features and functions related to scrolling, animations (
      - [SA Ripple](#saRipple)
          - [Basic Setup](#saRippleBasic)
          - [Advanced](#saUnderlineRipple)
+     - [springyElement](#springyelement)
+         - [Basic Setup](#springyelementBasic)
+         - [Advanced](#springyelementAdvanced)
 
 ## <a name="setup"></a>Setup and Usage:
 
@@ -424,8 +427,28 @@ Finally, you can combile all the arments and may end up with something like this
 
 *note:* You can currently _not_ call this advanced setup via this init() method.
 
+---
+---
+
+# <a name="springyelement"></a>springyElement
+(DEMO: https://codepen.io/justMoritz/pen/KYbypw)
+
+Adds a “springy Element” method which allows items to be slightly dragged by the curser or touch events and spring back when released, out-bounded or travelled a certain amount of pixels.
+
+#### <a name="springyelementBasic"></a>BASIC SETUP:
+
+##### jQuery Method:
+
+Call on any jQuery-able element like so: `$('your-selector-here').springyElement();`
+
+*note:* Calling this method via the init() method is currently _untested_ !
 
 
+#### <a name="springyelementAdvanced"></a>Advanced SETUP:
+
+Takes one argument, the amount of pixels an element can travel (20px by default) `$('your-selector-here').springyElement(200);`
+
+*note:* You can currently _not_ call this advanced setup via this init() method.
 
 
 

@@ -742,7 +742,8 @@ var scrollimate = (function( window, $ ){
        }else{
          $element.css('transform', 'translate('+ newXposition + 'px, ' + newYposition + 'px');
        }
-    };
+    },
+  };
 
 
   /**

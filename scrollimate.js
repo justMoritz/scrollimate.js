@@ -328,12 +328,12 @@ var scrollimate = (function( window, $ ){
 
         // if left arrow, activate previous tab
         else if (e.keyCode == '37') {
-          $('.tabscroll_activeNavi').prev().find('a, button').trigger('click').focus();
+          $('.tabscroll_activeNavi').prev('[data-tabscrollnavi]').find('a, button').trigger('click').focus();
         }
 
         // if right arrow, activate next tab
         else if (e.keyCode == '39') {
-          $('.tabscroll_activeNavi').next().find('a, button').trigger('click').focus();
+          $('.tabscroll_activeNavi').next('[data-tabscrollnavi]').find('a, button').trigger('click').focus();
         }
 
       }

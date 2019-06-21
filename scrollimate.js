@@ -260,30 +260,113 @@ var scrollimate = (function( window, $ ){
    *    default behaviour, and hiding all sections initially except the one specified.
    */
   var _saTabsSetUpPage = function() {
-    $tabscrollAnchors = $("[data-tabscrollnavcontainer]").find("a").not("[data-saexclude]");
+    $tabscrollAnchors = $("[data-tabscrollnavcontainer]").find("a, button").not("[data-saexclude]");
     $transition_type = $("[data-tabscrollnavcontainer]").attr("data-tabscrollnavcontainer");
-    $($tabscrollAnchors[0]).parent().addClass("tabscroll_activeNavi");
 
     for ($i = 0; $i < $tabscrollAnchors.length; $i++){
       var $curEl = $($tabscrollAnchors[$i]),
           eachAnchor = $curEl.attr("href");
-      $curEl.parent().attr("data-tabscrollnavi", eachAnchor.substring(1));
-      $(eachAnchor).attr("data-tabscroll", eachAnchor.substring(1));
+      $curEl.parent()
+        .attr("data-tabscrollnavi", eachAnchor.substring(1))
+        .find('a, button')
+          .attr("id", 'roletab'+eachAnchor.substring(1));
+      $(eachAnchor)
+        .attr("data-tabscroll", eachAnchor.substring(1))
+        .attr("aria-labelledby", 'roletab'+eachAnchor.substring(1))
+        .attr('tabindex', '-1')
+        .attr('role', 'tabpanel');
 
       // removes link if in non-indexable version (to not interfere with app status keeping)
       if(!_global.indexable){
-        $curEl.removeAttr("href").css('cursor', 'pointer');
+        $curEl
+          .attr("href", 'javascript:void(0);')
+          .css('cursor', 'pointer')
+          .attr('role', 'tab')
+        _saTabHelpers.saTabsPrepInactiveElement( $curEl );
         $curEl.on('click', function(){
           var tab_target = $(this).parent().attr("data-tabscrollnavi");
-          // console.log( tab_target );
           _saTabsHashChangeFunct(tab_target);
         });
       }
     }
+    _saTabHelpers.saTabsPrepActiveElement( $($tabscrollAnchors[0]) );
 
     $("[data-tabscroll]").removeAttr('id');
     $("[data-tabscroll]:first-of-type").siblings("[data-tabscroll]").hide();
+
+    document.onkeydown = _saTabHelpers.saTabsHashKeyListener;
   };
+
+  jQuery.expr[':'].focus = function( elem ) {
+    return elem === document.activeElement && ( elem.type || elem.href );
+  };
+
+
+  /**
+   * Collections of Methods used by saTabs
+   */
+  var _saTabHelpers = {
+    /**
+     * Listens for keystrokes related to tabchanges
+     * @param  {event} e  event
+     */
+    saTabsHashKeyListener: function(e){
+      // First checks that the current active tab has focus, so that tabs don't change if not desired
+      var $activeElement = $('.tabscroll_activeNavi').find('a, button');
+      if ( $activeElement.is(":focus") ) {
+        e = e || window.event;
+
+        // if Home Button, activate first tab
+        if (e.keyCode == '36') {
+          console.log('uparrow');
+          $('[data-tabscrollnavi]:first-child').find('a, button').trigger('click').focus();
+          console.log( $('[data-tabscrollnavi]:first-child') );
+        }
+
+        // if End Button, activate last button
+        else if (e.keyCode == '35') {
+          console.log('down');
+          $($('[data-tabscrollnavi]')[$('[data-tabscrollnavi]').length - 1]).find('a, button').trigger('click').focus();
+        }
+
+        // if left arrow, activate previous tab
+        else if (e.keyCode == '37') {
+          $('.tabscroll_activeNavi').prev().find('a, button').trigger('click').focus();
+        }
+
+        // if right arrow, activate next tab
+        else if (e.keyCode == '39') {
+          $('.tabscroll_activeNavi').next().find('a, button').trigger('click').focus();
+        }
+
+      }
+    },
+
+    /**
+     * Changes the markup of an element to be the active tab.
+     * @param  {object} $input   LINK, not the PARENT
+     */
+    saTabsPrepActiveElement: function($input){
+      $input
+        .attr('aria-selected', 'true')
+        .attr('tabindex', '0')
+        .addClass('this--active')
+        .parent().addClass("tabscroll_activeNavi");
+    },
+
+    /**
+     * Changes the markup of an element to be the INactive tab.
+     * @param  {object} $input   LINK, not the PARENT
+     */
+    saTabsPrepInactiveElement: function($input){
+      $input
+        .attr('aria-selected', 'false')
+        .attr('tabindex', '-1')
+        .removeClass('this--active')
+        .parent().removeClass("tabscroll_activeNavi");
+    },
+  };
+
 
   /**
    *
@@ -312,8 +395,8 @@ var scrollimate = (function( window, $ ){
       for (i=0; i<$naviEls.length; i++){
         var $curEl = $($naviEls[i]);
         if( $curEl.data('tabscrollnavi') === inputLoc ){
-          $('.tabscroll_activeNavi').removeClass('tabscroll_activeNavi');
-          $curEl.addClass('tabscroll_activeNavi');
+          _saTabHelpers.saTabsPrepInactiveElement( $('.tabscroll_activeNavi').find('a, button') );
+          _saTabHelpers.saTabsPrepActiveElement( $curEl.find('a, button') );
         }
       }
     };
@@ -342,7 +425,7 @@ var scrollimate = (function( window, $ ){
     if (location === undefined || location === 'all' || exists === false){
       var $firstTab = $("[data-tabscroll]:first-of-type");
       $firstTab.show();
-      $firstTab.addClass('activeTab');
+      $firstTab.addClass('activeTab').attr('tabindex', '0');
       if(_global.indexable){
         window.location.hash = $firstTab.attr('data-tabscroll');
       }
@@ -351,16 +434,25 @@ var scrollimate = (function( window, $ ){
       $("[data-tabscroll]").hide().removeClass('activeTab');
 
       if ( $transition_type === 'fade') {
-        $("[data-tabscroll='"+location+"']").fadeIn().addClass('activeTab');
+        $("[data-tabscroll='"+location+"']")
+          .fadeIn()
+          .addClass('activeTab')
+          .attr('tabindex', '0');;
         __activeClassHelperFunction(location);
 
       }
       else if ( $transition_type === 'slide') {
-        $("[data-tabscroll='"+location+"']").slideDown().addClass('activeTab');
+        $("[data-tabscroll='"+location+"']")
+          .slideDown()
+          .addClass('activeTab')
+          .attr('tabindex', '0');
         __activeClassHelperFunction(location);
       }
       else{
-        $("[data-tabscroll='"+location+"']").show().addClass('activeTab');
+        $("[data-tabscroll='"+location+"']")
+          .show()
+          .addClass('activeTab')
+          .attr('tabindex', '0');
         __activeClassHelperFunction(location);
       }
     }

@@ -207,7 +207,7 @@ var scrollimate = (function( window, $ ){
     console.log('saScroll initiated');
     $('[href^="#"]').click(function(){
       var $this = $(this);
-      if( $($this.attr('href')).length && $this.attr('href') !== '#' ){
+      if( $this.attr('href') !== 'javascript:void(0);' && $($this.attr('href')).length && $this.attr('href') !== '#' ){
         var smoothAnchorScrollTime = 500 + (Math.floor($($this.attr("href")).offset().top))/2;
         if(force){
           var scrollEvents = "";
@@ -318,14 +318,11 @@ var scrollimate = (function( window, $ ){
 
         // if Home Button, activate first tab
         if (e.keyCode == '36') {
-          console.log('uparrow');
           $('[data-tabscrollnavi]:first-child').find('a, button').trigger('click').focus();
-          console.log( $('[data-tabscrollnavi]:first-child') );
         }
 
         // if End Button, activate last button
         else if (e.keyCode == '35') {
-          console.log('down');
           $($('[data-tabscrollnavi]')[$('[data-tabscrollnavi]').length - 1]).find('a, button').trigger('click').focus();
         }
 
@@ -416,7 +413,6 @@ var scrollimate = (function( window, $ ){
     var exists = false;
     for(i=0; i < $allTabs.length; i++){
       var curtab = $($allTabs[i]).attr('data-tabscroll');
-      // console.log( curtab );
       if( curtab === location ){
         exists = true;
       }
@@ -541,7 +537,6 @@ var scrollimate = (function( window, $ ){
   var saAccordion = function(element, mainwidthinpercent, type, imageaspectratio){
     var __saAccordionHelper = function(){
       var $element = $(element);
-          // console.log( $element );
       if (mainwidthinpercent === undefined){
         mainwidthinpercent = '50';
       }
@@ -913,6 +908,89 @@ var scrollimate = (function( window, $ ){
   };
 
 
+  /**
+   * Helper Functions for _scrollStuff
+   * @type {Object}
+   */
+  _scrollStuffHelpers = {
+    /**
+     * checks if element in in view and applies class
+     * @param  {jQuery Selector} The full jQuery selector you want to use
+     * passed from inview() initial call
+     */
+    inviewChecker: function($passedselector, passedrepeat, passedclassname, passeddelay){
+      if($passedselector !== undefined){
+        $passedselector.each(function(){
+          // console.log( _global.wp + _global.saWinHi )
+          // console.log( $(this).offset().top  )
+          if( _global.wp + _global.saWinHi > $(this).offset().top ){
+            var $passedthis = $(this);
+            setTimeout(function(){
+              $passedthis.addClass(passedclassname);
+            }, passeddelay);
+          }else{
+            if(passedrepeat){
+              $(this).removeClass(passedclassname);
+            }
+          }
+        });
+      }
+    },
+
+    height: function($selector){
+      return $selector.outerHeight(true);
+    },
+  };
+
+
+  /**
+   * @param  {object} Takes the input parameters from original call
+   */
+  var inview = function( selector, calledinput ){
+
+    var repeat    = false;
+    var classname = 'this--nowinview';
+    var delay     = 0;
+
+    if (typeof(calledinput) !== 'undefined') {
+      repeat    = calledinput.repeat    || repeat;
+      classname = calledinput.classname || classname;
+      delay     = calledinput.delay     || delay;
+    }
+
+    _global.wp = $(window).scrollTop();
+
+    _scrollStuffHelpers.inviewChecker(selector, repeat, classname, delay);
+
+    $(window).scroll( function(){
+      _scrollStuffHelpers.inviewChecker(selector, repeat, classname, delay);
+    }); // end window scroll
+  };
+
+
+  /**
+   *
+   * Extends the jQuery Object with the scrollstuff Method,
+   * which calls the inview method with an input object as defined below
+   *
+   * @param  {object}       Takes the following input parameters
+   *
+   *   {
+   *      repeat:    {boolean}  whether or not the animation repeats
+   *                            when it's out and in of view again
+   *      classname: {string}   name of the class to attach to object
+   *                            'this--nowinview' by default.
+   *      delay:     {int}      delay until class is added, in milliseconds
+   *   }
+   *
+   */
+  jQuery.fn.scrollstuff = function(inputobject) {
+    inview(this, inputobject);
+    return this;
+  };
+
+
+
 
   /**
     * Init Function
@@ -932,6 +1010,7 @@ var scrollimate = (function( window, $ ){
 
     $(function(){
       _global.saWinHi = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+      _global.wp = $(window).scrollTop();
 
       // checks if the init method was called with the old way,
       // if so, loops through the array and executes each function by name
@@ -993,6 +1072,10 @@ var scrollimate = (function( window, $ ){
    * Public Methods
    */
   return{
+    enableMobile: enableMobile,
+    init: init,
+    inview: inview,
+    nonIDTabs: nonIDTabs,
     saAccordion: saAccordion,
     saParallax: saParallax,
     saRipple: saRipple,
@@ -1001,8 +1084,5 @@ var scrollimate = (function( window, $ ){
     saTabs: saTabs,
     saUnderline: saUnderline,
     springyElement: springyElement,
-    init: init,
-    nonIDTabs: nonIDTabs,
-    enableMobile: enableMobile,
   };
 })(window, jQuery);

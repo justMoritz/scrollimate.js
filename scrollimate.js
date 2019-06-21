@@ -23,6 +23,7 @@ var scrollimate = (function( window, $ ){
     mobileEnabled: false,
     isMObile: false,
     indexable: true,
+    transition_type: '',
   };
 
   /* * checks and sets variable that enables parallax even on mobile in init function * */
@@ -115,7 +116,7 @@ var scrollimate = (function( window, $ ){
    *    support the prevervation of translateY(-50%), though this feature is planned for the future
    */
   var _saParallaxAnimation = function($saBgLayers){
-    for (i = 0 ; i < $saBgLayers.length ; i++){
+    for (var i = 0 ; i < $saBgLayers.length ; i++){
       var posFlag   = 0,
           $curEl    = $($saBgLayers[i]),
           topoffset = $curEl.offset().top,
@@ -137,30 +138,30 @@ var scrollimate = (function( window, $ ){
         }
       }
 
-      // if( topoffset < _global.wp+_global.saWinHi){
-        if ( $curEl.attr("data-sabglayer") === "" )  {
-          $speed = 1;
-        }
-        else{
-          $speed = dataBgAttributes[0];
-        }
+      var $speed = 1;
 
-        parallaxHelperConfig = {
-          saBg: $saBgLayers[i],
-          tOfSet:  topoffset,
-          winHi: _global.saWinHi,
-          spd: $speed,
-          elHeight: elHeight,
-          left: '0px' ,
-          flag: posFlag
-        };
+      if ( $curEl.attr("data-sabglayer") === "" )  {
+        $speed = 1;
+      }
+      else{
+        $speed = dataBgAttributes[0];
+      }
 
-        if ($curEl.css("transform") === "translateX(-50%)"){
-          parallaxHelperConfig.left = '-50%';
-        }
+      var parallaxHelperConfig = {
+        saBg: $saBgLayers[i],
+        tOfSet:  topoffset,
+        winHi: _global.saWinHi,
+        spd: $speed,
+        elHeight: elHeight,
+        left: '0px' ,
+        flag: posFlag
+      };
 
-        __saParallaxHelperFunction( parallaxHelperConfig );
-      // }
+      if ($curEl.css("transform") === "translateX(-50%)"){
+        parallaxHelperConfig.left = '-50%';
+      }
+
+      __saParallaxHelperFunction( parallaxHelperConfig );
     }
   };
 
@@ -209,10 +210,11 @@ var scrollimate = (function( window, $ ){
       var $this = $(this);
       if( $this.attr('href') !== 'javascript:void(0);' && $($this.attr('href')).length && $this.attr('href') !== '#' ){
         var smoothAnchorScrollTime = 500 + (Math.floor($($this.attr("href")).offset().top))/2;
+        var scrollEvents = "";
         if(force){
-          var scrollEvents = "";
+          scrollEvents = "";
         }else{
-          var scrollEvents = "scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove";
+          scrollEvents = "scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove";
         }
         var $page = $('html, body');
 
@@ -260,10 +262,10 @@ var scrollimate = (function( window, $ ){
    *    default behaviour, and hiding all sections initially except the one specified.
    */
   var _saTabsSetUpPage = function() {
-    $tabscrollAnchors = $("[data-tabscrollnavcontainer]").find("a, button").not("[data-saexclude]");
-    $transition_type = $("[data-tabscrollnavcontainer]").attr("data-tabscrollnavcontainer");
+    var $tabscrollAnchors = $("[data-tabscrollnavcontainer]").find("a, button").not("[data-saexclude]");
+    _global.transition_type = $("[data-tabscrollnavcontainer]").attr("data-tabscrollnavcontainer");
 
-    for ($i = 0; $i < $tabscrollAnchors.length; $i++){
+    for (var $i = 0; $i < $tabscrollAnchors.length; $i++){
       var $curEl = $($tabscrollAnchors[$i]),
           eachAnchor = $curEl.attr("href");
       $curEl.parent()
@@ -281,7 +283,7 @@ var scrollimate = (function( window, $ ){
         $curEl
           .attr("href", 'javascript:void(0);')
           .css('cursor', 'pointer')
-          .attr('role', 'tab')
+          .attr('role', 'tab');
         _saTabHelpers.saTabsPrepInactiveElement( $curEl );
         $curEl.on('click', function(){
           var tab_target = $(this).parent().attr("data-tabscrollnavi");
@@ -389,7 +391,7 @@ var scrollimate = (function( window, $ ){
     /* checks the current location, matches it to the element containing the link, and adds correct class */
     var __activeClassHelperFunction = function(inputLoc){
       var $naviEls = $('[data-tabscrollnavi]');
-      for (i=0; i<$naviEls.length; i++){
+      for (var i=0; i<$naviEls.length; i++){
         var $curEl = $($naviEls[i]);
         if( $curEl.data('tabscrollnavi') === inputLoc ){
           _saTabHelpers.saTabsPrepInactiveElement( $('.tabscroll_activeNavi').find('a, button') );
@@ -411,7 +413,7 @@ var scrollimate = (function( window, $ ){
     // check if location resolves to a tab and sets the exists variable to true
     var $allTabs = $("[data-tabscroll]");
     var exists = false;
-    for(i=0; i < $allTabs.length; i++){
+    for(var i=0; i < $allTabs.length; i++){
       var curtab = $($allTabs[i]).attr('data-tabscroll');
       if( curtab === location ){
         exists = true;
@@ -429,15 +431,15 @@ var scrollimate = (function( window, $ ){
     else{
       $("[data-tabscroll]").hide().removeClass('activeTab');
 
-      if ( $transition_type === 'fade') {
+      if ( _global.transition_type === 'fade') {
         $("[data-tabscroll='"+location+"']")
           .fadeIn()
           .addClass('activeTab')
-          .attr('tabindex', '0');;
+          .attr('tabindex', '0');
         __activeClassHelperFunction(location);
 
       }
-      else if ( $transition_type === 'slide') {
+      else if ( _global.transition_type === 'slide') {
         $("[data-tabscroll='"+location+"']")
           .slideDown()
           .addClass('activeTab')
@@ -612,7 +614,7 @@ var scrollimate = (function( window, $ ){
   var saUnderline = function($target){
     $target = $target || $('a');
     var $allLinks = $target;
-    for(i=0; i<$allLinks.length; i++){
+    for(var i=0; i<$allLinks.length; i++){
       var cur   = $allLinks[i],
           words = $(cur).text().split(" ");
       $(cur).empty();
@@ -657,16 +659,18 @@ var scrollimate = (function( window, $ ){
   */
   var saRipple = function($input){
 
+    var fallbackcolor = '#ffffff',
+        inttype = 'click',
+        noclass = false,
+        $target;
+
     if(typeof $input !== 'undefined'){
       $target = $input.target || $('.ripple');
-      var fallbackcolor = $input.color || '#ffffff';
-      var inttype = $input.interaction || 'click';
-      var noclass = $input.noclass || false;
+      fallbackcolor = $input.color || '#ffffff';
+      inttype = $input.interaction || 'click';
+      noclass = $input.noclass || false;
     }else{
       $target = $('.ripple');
-      var fallbackcolor = '#ffffff';
-      var inttype = 'click';
-      var noclass = false;
     }
 
     if($("#scrollimate__ripplestyles").length){}else{
@@ -678,29 +682,30 @@ var scrollimate = (function( window, $ ){
     }
 
     var _execute = function(event, passedthis){
-        var $div = $('<div/>'),
-            btnOffset = $(passedthis).offset(),
-            xPos = event.pageX - btnOffset.left,
-            yPos = event.pageY - btnOffset.top;
+      var $div = $('<div/>'),
+          btnOffset = $(passedthis).offset(),
+          xPos = event.pageX - btnOffset.left,
+          yPos = event.pageY - btnOffset.top;
 
-        $div.addClass('ripple-effect');
-        var $ripple = $(".ripple-effect");
+      $div.addClass('ripple-effect');
+      var $ripple = $(".ripple-effect");
 
-        $ripple.css("height", $(passedthis).height());
-        $ripple.css("width", $(passedthis).height());
-        var color = $(passedthis).data("ripplecolor") || fallbackcolor;
-        $div.css({
-            top: yPos - ($ripple.height()/2),
-            left: xPos - ($ripple.width()/2),
-            background: color
-          }).appendTo($(passedthis));
+      $ripple.css("height", $(passedthis).height());
+      $ripple.css("width", $(passedthis).height());
+      var color = $(passedthis).data("ripplecolor") || fallbackcolor;
+      $div.css({
+          top: yPos - ($ripple.height()/2),
+          left: xPos - ($ripple.width()/2),
+          background: color
+        }).appendTo($(passedthis));
 
-        window.setTimeout(function(){
-          $div.remove();
-        }, 1500);
-      }
+      window.setTimeout(function(){
+        $div.remove();
+      }, 1500);
+    };
 
     var reseter = false;
+
     if(inttype === 'mouseover'){
       $target.on(inttype, function (event) {
         if(reseter === true){
@@ -732,7 +737,7 @@ var scrollimate = (function( window, $ ){
    */
   jQuery.fn.saRipple = function(input) {
     var passedinput;
-    for(i=0; i < this.length; i++){
+    for(var i=0; i < this.length; i++){
       if(input === undefined){
         passedinput = { target: $(this[i]) };
       }
@@ -912,7 +917,7 @@ var scrollimate = (function( window, $ ){
    * Helper Functions for _scrollStuff
    * @type {Object}
    */
-  _scrollStuffHelpers = {
+  var _scrollStuffHelpers = {
     /**
      * checks if element in in view and applies class
      * @param  {jQuery Selector} The full jQuery selector you want to use
@@ -1016,8 +1021,8 @@ var scrollimate = (function( window, $ ){
       // if so, loops through the array and executes each function by name
       var calledWithArr = Object.prototype.toString.call(input) == '[object Array]';
       if( calledWithArr ){
-        console.log( 'Classic Init Method classically calling the following Methods: ' )
-        for(i=0; i < input.length; i++){
+        console.log( 'Classic Init Method classically calling the following Methods: ' );
+        for(var i=0; i < input.length; i++){
           console.log( input[i] );
           _executeFunctionByName("scrollimate."+input[i]+"");
         }
@@ -1025,7 +1030,7 @@ var scrollimate = (function( window, $ ){
       // Otherwise, loops through each argument given as an object (new way)
       // Key should be the function name, input[key] the arguments to the function
       }else{
-        console.log( 'Init Method calling the following Methods: ' )
+        console.log( 'Init Method calling the following Methods: ' );
         for (var key in input){
 
           var current = window['scrollimate'][key];
@@ -1038,9 +1043,9 @@ var scrollimate = (function( window, $ ){
           if (typeof current === "function"){
             var isArr = Object.prototype.toString.call(input[key]) == '[object Array]';
             if( isArr ){
-              current.apply(null, input[key])
+              current.apply(null, input[key]);
             }else{
-              current.call(null, input[key])
+              current.call(null, input[key]);
             }
           }
         }

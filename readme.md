@@ -285,7 +285,13 @@ You may not want your tabs to be indexed / indexable. Tabscroll keeps track of y
 
 Now Tabscroll can accomodate, by simply calling the `saTabs.nonIDTabs()`; method some time after you included tabscroll.js. This will not index your tabs, not write to the URL, but still keep the same markup and functionality for your tabs.
 
+### Event
 
+SA Tabs triggers a custom event, `satabchanged` when a tab change is invoked. You can listen to this event like so `$(document).on('satabchanged', your-custom-function());`
+
+### WCAG compliance
+
+SA Tabs auto-generated markup is using best practices according to https://www.w3.org/TR/wai-aria-practices/examples/tabs/tabs-1/tabs.html
 
 ---
 ---

@@ -1,6 +1,6 @@
 {
   "name": "scrollimate",
-  "main": "scrollimate.js",
+  "main": "scrollimate.min.js",
   "homepage": "https://github.com/justMoritz/scrollimate",
   "authors": [
     "Moritz Zimmer <moritz@zimmermail.net>"

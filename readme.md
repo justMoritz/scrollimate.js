@@ -33,6 +33,12 @@ Scrollimate focuses on features and functions related to scrolling, animations (
      - [SA Ripple](#saRipple)
          - [Basic Setup](#saRippleBasic)
          - [Advanced](#saUnderlineRipple)
+     - [springyElement](#springyelement)
+         - [Basic Setup](#springyelementBasic)
+         - [Advanced](#springyelementAdvanced)
+     - [scrollStuff](#scrollstuff)
+         - [Basic Setup](#scrollstuffbasic)
+         - [Advanced](#scrollstuffadvanced)
 
 ## <a name="setup"></a>Setup and Usage:
 
@@ -282,7 +288,13 @@ You may not want your tabs to be indexed / indexable. Tabscroll keeps track of y
 
 Now Tabscroll can accomodate, by simply calling the `saTabs.nonIDTabs()`; method some time after you included tabscroll.js. This will not index your tabs, not write to the URL, but still keep the same markup and functionality for your tabs.
 
+### Event
 
+SA Tabs triggers a custom event, `satabchanged` when a tab change is invoked. You can listen to this event like so `$(document).on('satabchanged', your-custom-function());`
+
+### WCAG compliance
+
+SA Tabs auto-generated markup is using best practices according to https://www.w3.org/TR/wai-aria-practices/examples/tabs/tabs-1/tabs.html
 
 ---
 ---
@@ -424,8 +436,53 @@ Finally, you can combile all the arments and may end up with something like this
 
 *note:* You can currently _not_ call this advanced setup via this init() method.
 
+---
+---
+
+# <a name="springyelement"></a>springyElement
+(DEMO: https://codepen.io/justMoritz/pen/KYbypw)
+
+Adds a “springy Element” method which allows items to be slightly dragged by the curser or touch events and spring back when released, out-bounded or travelled a certain amount of pixels.
+
+#### <a name="springyelementBasic"></a>BASIC SETUP:
+
+##### jQuery Method:
+
+Call on any jQuery-able element like so: `$('your-selector-here').springyElement();`
+
+*note:* Calling this method via the init() method is currently _untested_ !
 
 
+#### <a name="springyelementAdvanced"></a>Advanced SETUP:
 
+Takes one argument, the amount of pixels an element can travel (20px by default) `$('your-selector-here').springyElement(200);`
 
+*note:* You can currently _not_ call this advanced setup via this init() method.
 
+---
+---
+
+# <a name="scrollstuff"></a>scrollstuff
+Simple jQuery _“stuff is scrolled into view so let's add a class”_ plugin
+
+## Usage:
+### <a name="scrollstuffbasic"></a>Basic
+scrollstuff Extends the jQuery Object with a new method, so the easiest usage is like this:
+
+    $('your-selector-here').scrollstuff({});
+
+### <a name="scrollstuffadvanced"></a>Advanced
+You van also run scrollstuff with arguments
+
+    $('your-selector-here').scrollstuff({
+      classname: 'custom-class-name',
+      delay: 700,
+      repeat: true
+    });
+
+  The scrollstuff object current accepts the following arguments in object notation:
+  * classname _(string)_ — name of the class to attach to object. `'this--nowinview'` by default.
+  * delay _int_ — delay until class is added, in milliseconds
+  * repeat _boolean_ whether or not the animation repeats when it's out and in of view again
+
+#### That's it! Have fun and enjoy the ride and all that good stuff!

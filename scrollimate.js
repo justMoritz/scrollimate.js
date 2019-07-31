@@ -482,7 +482,7 @@ var scrollimate = (function( window, $ ){
       }, 100);
     }
 
-    $(window).load(function(){
+    $(window).on('load', function(){
        _saTabsHashChangeFunct();
     });
 

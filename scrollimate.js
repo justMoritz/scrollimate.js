@@ -12,7 +12,7 @@
  * https://creativecommons.org/licenses/by/4.0/legalcode
  *
  */
-var scrollimate = (function( window, $ ){
+var scrollimate = (function($){
 
   var _global = {
     wp:   0,
@@ -320,22 +320,64 @@ var scrollimate = (function( window, $ ){
 
         // if Home Button, activate first tab
         if (e.keyCode == '36') {
-          $('[data-tabscrollnavi]:first-child').find('a, button').trigger('click').focus();
+          var $firstTab = $('[data-tabscrollnavi]:first-child').find('a, button');
+
+          // only proceed if the link is not excluded
+          if( !$firstTab[0].hasAttribute('data-saexclude') ){
+
+            // non-indexed version simply trigger click
+            if(!_global.indexable){
+              $firstTab.trigger('click').focus();
+            }
+             // for indexed version, change hash and focus tab
+            else{
+              window.location.hash = $firstTab.attr('href');
+              $firstTab.focus();
+            }
+          }
         }
 
         // if End Button, activate last button
+        // other documentation same as above
         else if (e.keyCode == '35') {
-          $($('[data-tabscrollnavi]')[$('[data-tabscrollnavi]').length - 1]).find('a, button').trigger('click').focus();
+          var $lastTab = $($('[data-tabscrollnavi]')[$('[data-tabscrollnavi]').length - 1]).find('a, button');
+          if( !$lastTab[0].hasAttribute('data-saexclude') ){
+            if(!_global.indexable){
+              $lastTab.trigger('click').focus();
+            }
+            else{
+              window.location.hash = $lastTab.attr('href');
+              $lastTab.focus();
+            }
+          }
         }
 
         // if left arrow, activate previous tab
+        // other documentation same as above
         else if (e.keyCode == '37') {
-          $('.tabscroll_activeNavi').prev('[data-tabscrollnavi]').find('a, button').trigger('click').focus();
+          var $prevTab = $('.tabscroll_activeNavi').prev('[data-tabscrollnavi]').find('a, button');
+          if( !$prevTab[0].hasAttribute('data-saexclude') ){
+            if(!_global.indexable){
+              $prevTab.trigger('click').focus();
+            }else{
+              window.location.hash = $prevTab.attr('href');
+              $prevTab.focus();
+            }
+          }
         }
 
         // if right arrow, activate next tab
+        // other documentation same as above
         else if (e.keyCode == '39') {
-          $('.tabscroll_activeNavi').next('[data-tabscrollnavi]').find('a, button').trigger('click').focus();
+          var $nextTab = $('.tabscroll_activeNavi').next('[data-tabscrollnavi]').find('a, button');
+          if( !$nextTab[0].hasAttribute('data-saexclude') ){
+            if(!_global.indexable){
+              $nextTab.trigger('click').focus();
+            }else{
+              window.location.hash = $nextTab.attr('href');
+              $nextTab.focus();
+            }
+          }
         }
 
       }
@@ -1090,4 +1132,4 @@ var scrollimate = (function( window, $ ){
     saUnderline: saUnderline,
     springyElement: springyElement,
   };
-})(window, jQuery);
+})(jQuery);

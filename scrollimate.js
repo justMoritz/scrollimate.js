@@ -322,8 +322,8 @@ var scrollimate = (function($){
         if (e.keyCode == '36') {
           var $firstTab = $('[data-tabscrollnavi]:first-child').find('a, button');
 
-          // only proceed if the link is not excluded
-          if( !$firstTab[0].hasAttribute('data-saexclude') ){
+          // only proceed if the link is not excluded (and exists)
+          if( $firstTab.length && !$firstTab[0].hasAttribute('data-saexclude') ){
 
             // non-indexed version simply trigger click
             if(!_global.indexable){
@@ -341,7 +341,7 @@ var scrollimate = (function($){
         // other documentation same as above
         else if (e.keyCode == '35') {
           var $lastTab = $($('[data-tabscrollnavi]')[$('[data-tabscrollnavi]').length - 1]).find('a, button');
-          if( !$lastTab[0].hasAttribute('data-saexclude') ){
+          if( $lastTab.length && !$lastTab[0].hasAttribute('data-saexclude') ){
             if(!_global.indexable){
               $lastTab.trigger('click').focus();
             }
@@ -356,7 +356,7 @@ var scrollimate = (function($){
         // other documentation same as above
         else if (e.keyCode == '37') {
           var $prevTab = $('.tabscroll_activeNavi').prev('[data-tabscrollnavi]').find('a, button');
-          if( !$prevTab[0].hasAttribute('data-saexclude') ){
+          if( $prevTab.length && !$prevTab[0].hasAttribute('data-saexclude') ){
             if(!_global.indexable){
               $prevTab.trigger('click').focus();
             }else{
@@ -370,7 +370,7 @@ var scrollimate = (function($){
         // other documentation same as above
         else if (e.keyCode == '39') {
           var $nextTab = $('.tabscroll_activeNavi').next('[data-tabscrollnavi]').find('a, button');
-          if( !$nextTab[0].hasAttribute('data-saexclude') ){
+          if( $nextTab.length && !$nextTab[0].hasAttribute('data-saexclude') ){
             if(!_global.indexable){
               $nextTab.trigger('click').focus();
             }else{

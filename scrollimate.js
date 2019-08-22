@@ -12,7 +12,7 @@
  * https://creativecommons.org/licenses/by/4.0/legalcode
  *
  */
-var scrollimate = (function( window, $ ){
+var scrollimate = (function($){
 
   var _global = {
     wp:   0,
@@ -1132,4 +1132,4 @@ var scrollimate = (function( window, $ ){
     saUnderline: saUnderline,
     springyElement: springyElement,
   };
-})(window, jQuery);
+})(jQuery);

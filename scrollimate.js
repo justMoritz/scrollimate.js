@@ -203,8 +203,10 @@ var scrollimate = (function($){
    * Page is animated to scroll from the top to the element that that matches
    * the href attribute.
    * return false to prevent default
+   * you can pass a callback into the function call, which will execute as soon as the animation is over
    */
-  var saScroll = function(force) {
+  var saScroll = function(force, callback) {
+    callback = callback || false;
     console.log('saScroll initiated');
     $('[href^="#"]').click(function(){
       var $this = $(this);
@@ -225,6 +227,9 @@ var scrollimate = (function($){
           scrollTop: $( $this.attr('href') ).offset().top
         }, smoothAnchorScrollTime).promise().then(function() {
           $page.off(scrollEvents);
+          if( callback ){
+            callback();
+          }
         });
         return false;
       }

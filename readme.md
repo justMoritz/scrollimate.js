@@ -180,6 +180,10 @@ Alternatively, you can *force* the scroll by calling the method with a force arg
 
 `scrollimate.saScroll('force')`
 
+There is also a provision for a callback, just remember to decide on the force parameter first. Usage:
+
+`scrollimate.saScroll( false, you-callback() )`
+
 
 _
 
